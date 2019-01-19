@@ -1,5 +1,6 @@
 # Boardgame
 Créer un jeu de plateau tour par tour en JS
+
 Projet dans le cadre de la formation Développeur Front End d'OpenClassrooms
 
 ## Enoncé
