@@ -13,6 +13,9 @@ class Map {
         this.initObstacle(obstacles);
         this.initWeapon(weapon);
         this.initPlayer(player);
+        this.displayMap();
+        // Test déplacement
+        player1.deplace(this);
     }
     
     initMap(){
@@ -87,6 +90,15 @@ class Map {
                     // On place le joueur 1 dans le conteneur de la case
                     // A MODIFIER ................................................................
                     square.setConteneur(player1);
+                    // A MODIFIER : ajout de l'arme de base manuellement
+                    player1.setConteneur({
+                        name: "Epée en bois",
+                        image : "woodSword.png",
+                        posX: null,
+                        posY: null,
+                        model: "weapon",
+                        damage: "10"
+                        });
                     posPlayer.push([x,y]);
 
                     // Debug
@@ -106,6 +118,15 @@ class Map {
                     if (alone==true) {
                         // A MODIFIER ............................................................
                         square.setConteneur(player2);
+                        // A MODIFIER : ajout de l'arme de base manuellement
+                        player2.setConteneur({
+                            name: "Epée en bois",
+                            image : "woodSword.png",
+                            posX: null,
+                            posY: null,
+                            model: "weapon",
+                            damage: "10"
+                            });
                         posPlayer.push([x,y]);
                         // Debug
                         console.log("Joueur 2 : Igor");
@@ -156,7 +177,7 @@ class Map {
             this.fight(player2,player1);
         }
         else {
-            console.log("Combat terminé");
+            alert("Combat terminé");
         }
         
     }
@@ -249,7 +270,7 @@ class Case {
             let inventory = this.conteneur;
             // TO DO : vérifier que c'est un array car il peut être null
             $.each(inventory,function(index,value) {
-                if(element.name==value.name) {
+                if(element==value) {
                     inventory.splice(index,1);
                     return true;
                 };
@@ -393,6 +414,7 @@ class Character {
         this.image = image;
         this.line = line;
         this.column = column;
+        this.conteneur = null;
     }
 
     // TO DO
@@ -402,15 +424,14 @@ class Character {
         
     }
 
-    // TO DO : actions lors du drop, affecter nouvelles variables, remove variables, stopper draggable etc...
-    // TO DO : ajouter condition sur joueur adverse !!!!!!!
-    // TO DO : faire méthode d'attribution des caractéristiques CSS pour une case
+    
+    // TO DO : ajouter condition sur joueur adverse !!!!!!!    
     deplace(map){
         let player = this;
         let line = this.line;
         let column = this.column;
         
-        let selElt = '#'+this.name;  
+        let selElt = '#'+player.name;  
         $(selElt).draggable({containment : '#board' , revert : 'invalid', snap : true, grid : [map.size , map.size]});
                 
         // Modèle de déplacement
@@ -425,30 +446,7 @@ class Character {
                     
                     $(idElt).droppable({
                                             accept : selElt, 
-                                            drop : function(){
-                                                
-                                                $(selElt).draggable( "destroy" );
-
-                                                // IL FAUDRAIT DEPLACER LE selElt mais pas vraiment gênant à vérifier
-                                                player.line = line;
-                                                player.column = column+i;
-                                                map.removeDisplayMove();
-                                                $( '.ui-droppable' ).droppable( "destroy" );
-                                                map.board[line][column].removeConteneur(player);
-                                                
-                                                map.board[line][column+i].setConteneur(player);
-                                                
-                                                player.characterAround(map);
-                                                
-                                                // Simulation temporaire de tour par tour
-                                                if (player1.health>=0&&player2.health>=0) {
-                                                    if (player==player1) {
-                                                        player2.deplace(map);}
-                                                    else {
-                                                            player1.deplace(map);
-                                                    };
-                                                    };
-                                            }
+                                            drop : () => {player.stopMove(map,line,column+i);} 
                                         });
                 }
                 else {
@@ -465,26 +463,7 @@ class Character {
                     
                     $(idElt).droppable({
                                             accept : selElt, 
-                                            drop : function(){
-                                                player.line = line;
-                                                player.column = column+i;
-                                                $(selElt).draggable( "destroy" );
-                                                map.removeDisplayMove();
-                                                $( '.ui-droppable' ).droppable( "destroy" );
-                                                map.board[line][column].removeConteneur(player);
-                                                
-                                                map.board[line][column+i].setConteneur(player);
-                                                
-                                                player.characterAround(map);
-                                                // Simulation temporaire de tour par tour
-                                                if (player1.health>=0&&player2.health>=0) {
-                                                    if (player==player1) {
-                                                        player2.deplace(map);}
-                                                    else {
-                                                            player1.deplace(map);
-                                                    };
-                                                    };
-                                            }
+                                            drop : () => {player.stopMove(map,line,column+i);}
                                         });
                 }
                 else {
@@ -501,26 +480,7 @@ class Character {
                     
                     $(idElt).droppable({
                                             accept : selElt, 
-                                            drop : function(){
-                                                player.line = line+j;
-                                                player.column = column;
-                                                $(selElt).draggable( "destroy" );
-                                                map.removeDisplayMove();
-                                                $( '.ui-droppable' ).droppable( "destroy" );
-                                                map.board[line][column].removeConteneur(player);
-                                                
-                                                map.board[line+j][column].setConteneur(player);
-                                                
-                                                player.characterAround(map);
-                                                // Simulation temporaire de tour par tour
-                                                if (player1.health>=0&&player2.health>=0) {
-                                                    if (player==player1) {
-                                                        player2.deplace(map);}
-                                                    else {
-                                                            player1.deplace(map);
-                                                    };
-                                                    };
-                                            }
+                                            drop : () => {player.stopMove(map,line+j,column);}
                                         });
                 }
                 else {
@@ -537,26 +497,7 @@ class Character {
                     
                     $(idElt).droppable({
                                             accept : selElt, 
-                                            drop : function(){
-                                                player.line = line+j;
-                                                player.column = column;
-                                                $(selElt).draggable( "destroy" );
-                                                map.removeDisplayMove();
-                                                $( '.ui-droppable' ).droppable( "destroy" );
-                                                map.board[line][column].removeConteneur(player);
-
-                                                map.board[line+j][column].setConteneur(player);
-
-                                                player.characterAround(map);
-                                                // Simulation temporaire de tour par tour
-                                                if (player1.health>=0&&player2.health>=0) {
-                                                if (player==player1) {
-                                                    player2.deplace(map);}
-                                                else {
-                                                        player1.deplace(map);
-                                                };
-                                                };
-                                            }
+                                            drop : () => {player.stopMove(map,line+j,column);}
                                         });
                 }
                 else {
@@ -565,6 +506,27 @@ class Character {
             }
         }
    
+    }
+
+    // TO DO : améliorer
+    stopMove(map,newLine,newColumn){
+        let selElt = '#'+this.name; 
+        $(selElt).draggable( "destroy" );
+        map.removeDisplayMove();
+        $( '.ui-droppable' ).droppable( "destroy" );
+        map.board[this.line][this.column].removeConteneur(this);
+        map.board[newLine][newColumn].setConteneur(this);
+        this.updateCoordinatesConteneur();
+        this.characterAround(map);
+       
+        // Simulation temporaire de tour par tour
+        if (player1.health>=0&&player2.health>=0) {
+            if (this===player1) {
+                player2.deplace(map);}
+            else {
+                    player1.deplace(map);
+            };
+        };  
     }
 
     // TO DO
@@ -576,13 +538,7 @@ class Character {
         let characters = new Array();
 
         if (this.column+1<=map.maxColumn-1) {
-            if (map.board[this.line][this.column+1].hasPlayer()) {
-                map.fight(player1,player2);
-            }
-            else {
-                console.log("test");
-            };
-            
+            map.board[this.line][this.column+1].hasPlayer()? map.fight(player1,player2) : console.log("test");          
         };
         if (this.column-1>=0) {
             map.board[this.line][this.column-1].hasPlayer()? map.fight(player1,player2) : console.log("test");
@@ -623,6 +579,44 @@ class Character {
     // TO DO
     defend(target){
 
+    }
+
+    // TO DO
+    setConteneur(element){
+        if(this.conteneur===null) {
+            this.conteneur = new Array();
+        };
+        element.line = this.line;
+        element.column = this.column;
+        this.conteneur.push(element);        
+    }
+
+    // TO DO : A améliorer
+    removeConteneur(element=null){
+        if(element===null) {
+            this.conteneur = null;
+            return true;
+        }
+        else {
+            let inventory = this.conteneur;
+            // TO DO : vérifier que c'est un array car il peut être null
+            $.each(inventory,function(index,value) {
+                if(element==value) {
+                    inventory.splice(index,1);
+                    return true;
+                };
+            });
+            return false;
+        };
+    }
+
+    // TO DO : A améliorer
+    updateCoordinatesConteneur(){
+        let player = this;
+        $.each(player.conteneur,function(index,value) {
+                value.line = player.line;
+                value.column = player.column;                
+        });            
     }
 }
 
