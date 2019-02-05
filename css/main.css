@@ -1,0 +1,25 @@
+#board{
+    position:relative;
+    z-index: 0;
+}
+.ligne{
+    margin: 0px;
+    display: flex;
+}
+.case{
+    background-repeat: no-repeat;
+    margin: 0px;
+    background-position : 0px 0px;
+}
+.conteneur{
+    position: absolute;
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    margin: 0px;
+    z-index: 100;
+}
+.move{
+    background-repeat: no-repeat;
+    margin: 0px;
+    z-index: 80;
+}

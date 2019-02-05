@@ -3,10 +3,12 @@ Créer un jeu de plateau tour par tour en JS
 
 Projet dans le cadre de la formation Développeur Front End d'OpenClassrooms
 
+----
 ## Enoncé
 Vous avez jusqu'ici développé des petites applications JavaScript. Il faut maintenant vous lancer dans la création d'un projet plus complet, plus solide... bref plus costaud. ;)
 
 Ce projet consistera à créer un jeu en ligne en JavaScript dans lequel 2 joueurs évoluent chacun leur tour pour s'affronter. Comme dans Highlander, il ne peut en rester qu'un !
+
 ![Aperçu du jeu navigateur au tour par tour](https://sdz-upload.s3.amazonaws.com/prod/upload/apercu15.png)
 
 ### Etape 1 : génération de la carte
@@ -41,10 +43,42 @@ Lors d'un combat, le fonctionnement du jeu est le suivant :
 * Lorsque le joueur se défend, il encaisse 50% de dégâts en moins qu’en temps normal
 * Dès que les points de vie d’un joueur (initialement à 100) tombent à 0 , celui-ci a perdu. Un message s’affiche et la partie est terminée.
 
+----
 ## Compétences évaluées
 
 1. Concevoir une architecture d'application JavaScript réutilisable
 2. Développer une application JavaScript orientée objet
 3. Mettre en oeuvre la bibliothèque jQuery dans une application web
 
+----
+## Technologies
 
+Les versions utilisées dans ce projet seront décrites dans cette section :
+
+* Javascript
+* [jQuery 3.3.1](https://jquery.com/)
+* CSS
+* HTML
+* Bootstrap
+
+----
+## Ressources
+
+### Cours
+
+* [Apprenez à coder avec JavaScript](https://openclassrooms.com/fr/courses/2984401-apprenez-a-coder-avec-javascript)
+* [Créez des pages web interactives avec JavaScript](https://openclassrooms.com/fr/courses/3306901-creez-des-pages-web-interactives-avec-javascript)
+* [Simplifiez vos développements JavaScript avec jQuery](https://openclassrooms.com/fr/courses/1631636-simplifiez-vos-developpements-javascript-avec-jquery)
+* [Les bases de JavaScript, orienté objet|MDN Web Docs by Moz://a](https://developer.mozilla.org/fr/docs/Learn/JavaScript/Objects/Basics)
+
+### Vidéos
+
+* 
+
+### Images
+
+* 
+
+### Sons et musiques
+
+* 
