@@ -57,8 +57,8 @@ class Map {
                     // On compare les armes via leur nom qui est unique !!!! Attention !!!
                     $.each(armesUniques,function(index,value) {
                         if (value == weapon.name) {
-                            square.conteneur[0].posX = null;
-                            square.conteneur[0].posY = null;
+                            square.conteneur[0].line = null;
+                            square.conteneur[0].column = null;
                             // là on vide complètement le conteneur : A AMELIORER
                             square.removeConteneur();
                             condition = true;
@@ -74,7 +74,7 @@ class Map {
     // TO DO : mettre des players différents
     initPlayer(player=2){ 
         let posPlayer = new Array();
-        
+        let weaponBasic = new Item("Epée en bois","woodSword.png",null,null,"weapon");
         for (let p = 0 ; p < player ; p++) {
             let [x,y] = this.randomCoordinates();
             let square = this.board[x][y];
@@ -91,14 +91,8 @@ class Map {
                     // A MODIFIER ................................................................
                     square.setConteneur(player1);
                     // A MODIFIER : ajout de l'arme de base manuellement
-                    player1.setConteneur({
-                        name: "Epée en bois",
-                        image : "woodSword.png",
-                        posX: null,
-                        posY: null,
-                        model: "weapon",
-                        damage: "10"
-                        });
+                    
+                    player1.setConteneur(weaponBasic);
                     posPlayer.push([x,y]);
 
                     // Debug
@@ -119,14 +113,7 @@ class Map {
                         // A MODIFIER ............................................................
                         square.setConteneur(player2);
                         // A MODIFIER : ajout de l'arme de base manuellement
-                        player2.setConteneur({
-                            name: "Epée en bois",
-                            image : "woodSword.png",
-                            posX: null,
-                            posY: null,
-                            model: "weapon",
-                            damage: "10"
-                            });
+                        player2.setConteneur(weaponBasic);
                         posPlayer.push([x,y]);
                         // Debug
                         console.log("Joueur 2 : Igor");
@@ -219,48 +206,70 @@ class Case {
     // TO DO : gestion de plusieurs éléments dans le conteneur
     displayConteneur(map){
         
-        // Si le conteneur est vide, on affiche rien
+        let that = this;
+        let divElt;
+        let persoElt;
+        
+        // Si le conteneur est vide, on ne crée pas de div conteneur
+
         // Si le conteneur n'est pas vide alors il contient un élément ou plus :
         if (this.conteneur!==null) {
             
-            // TO DO : voir si on peut pas optimiser les 3 lignes en dessous 
-            let divElt = $('<div/>').attr({id:'ConteneurL'+this.line+'C'+this.column,class:'conteneur'});
+            // Si le conteneur n'a pas d'affichage on le crée sinon on le récupère
+            if ($('#ConteneurL'+this.line+'C'+this.column).length == 0) {
+            divElt = $('<div/>').attr({id:'ConteneurL'+this.line+'C'+this.column,class:'conteneur'});
             this.setCaseSize(map,divElt);
             divElt.appendTo('#L'+this.line+'C'+this.column);
+            }
+            else {
+                divElt = $('#ConteneurL'+this.line+'C'+this.column);
+                
+            };
             
             
-            // Si le conteneur contient un personnage on l'affiche sinon on affiche le premier item
+            // Si le conteneur contient :
+            // 1 personnage alors on n'affiche que lui (on crée un div personnage dans le div conteneur
+            // sinon si on a qu'un item on affiche l'item (change l'url background) 
+            // TO DO : sinon il y a plusieurs items on affiche un coffre et on lui ajoute un évènement ouverture ...
             let inventaire = this.conteneur;
             $.each(inventaire,function(index,value) {
                 
                 let url = "url('"+map.world+value.image+"')";
-                divElt.css('background-image', url);
-
+                
+                //Affichage du personnage
                 if(value instanceof Character) {
-                    //Affichage du personnage
-                    // ATTENTION id du personnage à revoir 
-                    divElt.attr('id',value.name);
-                    divElt.css('z-index','150');
+                    
+                    if ($('#'+value.name).length == 0) {
+                        persoElt = $('<div/>').attr({id: value.name, class:'conteneur'});
+                        persoElt.css('background-image', url);
+                        that.setCaseSize(map,persoElt);
+                        persoElt.appendTo('#board');
+                        persoElt.css('z-index','150');
+                    }
+                    else {
+                        persoElt = $('#'+value.name);
+                    };
+                    
+                    
                 }
                 else {
-                    //Affichage des armes ???????????????????????????????????????
-                                    
+                    divElt.css('background-image', url);        
                 }
             });    
         };
     }
 
-    // TO DO
+    // Méthode qui ajoute un élément dans le conteneur
     setConteneur(element){
         if(this.conteneur===null) {
             this.conteneur = new Array();
-        };
+        };       
         element.line = this.line;
         element.column = this.column;
         this.conteneur.push(element);        
     }
 
-    // TO DO : A améliorer
+    // Méthode qui vide entièrement le conteneur ou enlève un élément précis du conteneur
     removeConteneur(element=null){
         if(element===null) {
             this.conteneur = null;
@@ -268,7 +277,7 @@ class Case {
         }
         else {
             let inventory = this.conteneur;
-            // TO DO : vérifier que c'est un array car il peut être null
+            
             $.each(inventory,function(index,value) {
                 if(element==value) {
                     inventory.splice(index,1);
@@ -277,6 +286,18 @@ class Case {
             });
             return false;
         };
+    }
+
+    // Méthode qui retourne la dernière arme d'un conteneur s'il est présent sinon une chaîne vide 
+    getWeapon(){
+        let inventory = this.conteneur;
+        let weapon="";
+            $.each(inventory,function(index,value) {
+                if (value instanceof Item && value.model==="weapon"){
+                    weapon = value;
+                }
+            });
+        return weapon;
     }
 
     // TO DO : 
@@ -332,54 +353,19 @@ class Case {
         let aleatoire = Math.floor(Math.random()*4);
         switch (aleatoire) {
             case 1:
-            return {
-            name: "Dague",
-            image : "dagger.png",
-            posX: null,
-            posY: null,
-            model: "weapon",
-            damage: "15"
-            };
+            return new Item ("Dague","dagger.png",null,null,"weapon");
             break;
             case 2:
-            return {
-            name: "Epée",
-            image : "sword.png",
-            posX: null,
-            posY: null,
-            model: "weapon",
-            damage: "20"
-            };
+            return new Item ("Epée","sword.png",null,null,"weapon");
             break;
             case 3:
-            return {
-            name: "Hache",
-            image : "axe.png",
-            posX: null,
-            posY: null,
-            model: "weapon",
-            damage: "25"
-            };
+            return new Item ("Hache","axe.png",null,null,"weapon");
             break;
             case 4:
-            return {
-            name: "Marteau",
-            image : "hammer.png",
-            posX: null,
-            posY: null,
-            model: "weapon",
-            damage: "30"
-            };
+            return new Item ("Marteau","hammer.png",null,null,"weapon");
             break;
             default:
-            return {
-            name: "Epée en bois",
-            image : "woodSword.png",
-            posX: null,
-            posY: null,
-            model: "weapon",
-            damage: "10"
-            };
+            return new Item ("Epée en bois","woodSword.png",null,null,"weapon");
             break;
         }
     }
@@ -402,7 +388,85 @@ class Case {
             this.image = "obstacle.png";
         }
     }
+
+    // PROGRESS ........................................................................
+
+    weaponOnPath(map,player,originLine,originColumn){
+        // Méthode qui regarde si une arme est sur le chemin
+        // besoin de la position actuelle et de l'ancienne
+        // Normalement on doit pouvoir obtenir player dans la case ...
+        
+        let signLine = Math.sign(this.line-originLine);
+        let signColumn = Math.sign(this.column-originColumn);
+        
+       
+        switch(signLine) {
+            case 1 :
+                
+                for (let i = originLine+1 ; i <= this.line ; i++){
+                    if (map.board[i][originColumn].hasWeapon()==true) {
+                        let weaponConteneur = map.board[i][originColumn].getWeapon();
+                        map.board[i][originColumn].removeConteneur(weaponConteneur);
+                        let weaponCharacter = player.getWeapon();
+                        player.removeConteneur(weaponCharacter);
+                        map.board[i][originColumn].setConteneur(weaponCharacter);
+                        player.setConteneur(weaponConteneur);
+                        $('#ConteneurL'+i+'C'+originColumn).css('background-image',"url('"+map.world+weaponCharacter.image+"')");
+                        /// AFFICHAGE DE L'ARME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    }
+                };
+                break;
+            case -1 :
+                
+                for (let i = originLine-1 ; i >= this.line ; i--){
+                    if (map.board[i][originColumn].hasWeapon()) {
+                        let weaponConteneur = map.board[i][originColumn].getWeapon();
+                        map.board[i][originColumn].removeConteneur(weaponConteneur);
+                        let weaponCharacter = player.getWeapon();
+                        player.removeConteneur(weaponCharacter);
+                        map.board[i][originColumn].setConteneur(weaponCharacter);
+                        player.setConteneur(weaponConteneur);
+                        $('#ConteneurL'+i+'C'+originColumn).css('background-image',"url('"+map.world+weaponCharacter.image+"')");
+                    }
+                }
+                break;
+            case 0 :
+                
+                switch(signColumn){
+                    case 1:
+                        for (let j = originColumn+1 ; j <= this.column ; j++){
+                            if (map.board[originLine][j].hasWeapon()) {
+                                let weaponConteneur = map.board[originLine][j].getWeapon();
+                                map.board[originLine][j].removeConteneur(weaponConteneur);
+                                let weaponCharacter = player.getWeapon();
+                                player.removeConteneur(weaponCharacter);
+                                map.board[originLine][j].setConteneur(weaponCharacter);
+                                player.setConteneur(weaponConteneur);
+                                $('#ConteneurL'+originLine+'C'+j).css('background-image',"url('"+map.world+weaponCharacter.image+"')");
+                            }
+                        }
+                    break;
+                    case -1:
+                        for (let j = originColumn-1 ; j >= this.column ; j--){
+                            if (map.board[originLine][j].hasWeapon()) {
+                                let weaponConteneur = map.board[originLine][j].getWeapon();
+                                map.board[originLine][j].removeConteneur(weaponConteneur);
+                                let weaponCharacter = player.getWeapon();
+                                player.removeConteneur(weaponCharacter);
+                                map.board[originLine][j].setConteneur(weaponCharacter);
+                                player.setConteneur(weaponConteneur);
+                                $('#ConteneurL'+originLine+'C'+j).css('background-image',"url('"+map.world+weaponCharacter.image+"')");
+                            }
+                        }
+                    break;
+                }
+                break;
+        }
+
+    }
+
     
+
 }
 
 class Character {
@@ -446,7 +510,10 @@ class Character {
                     
                     $(idElt).droppable({
                                             accept : selElt, 
-                                            drop : () => {player.stopMove(map,line,column+i);} 
+                                            drop : () => {
+                                                map.board[line][column+i].weaponOnPath(map,player,player.line,player.column);
+                                                player.stopMove(map,line,column+i);
+                                            } 
                                         });
                 }
                 else {
@@ -463,7 +530,10 @@ class Character {
                     
                     $(idElt).droppable({
                                             accept : selElt, 
-                                            drop : () => {player.stopMove(map,line,column+i);}
+                                            drop : () => {
+                                                map.board[line][column+i].weaponOnPath(map,player,player.line,player.column);
+                                                player.stopMove(map,line,column+i);
+                                            }
                                         });
                 }
                 else {
@@ -480,7 +550,10 @@ class Character {
                     
                     $(idElt).droppable({
                                             accept : selElt, 
-                                            drop : () => {player.stopMove(map,line+j,column);}
+                                            drop : () => {
+                                                map.board[line+j][column].weaponOnPath(map,player,player.line,player.column);
+                                                player.stopMove(map,line+j,column);
+                                            }
                                         });
                 }
                 else {
@@ -497,7 +570,10 @@ class Character {
                     
                     $(idElt).droppable({
                                             accept : selElt, 
-                                            drop : () => {player.stopMove(map,line+j,column);}
+                                            drop : () => {
+                                                map.board[line+j][column].weaponOnPath(map,player,player.line,player.column);
+                                                player.stopMove(map,line+j,column);
+                                            }
                                         });
                 }
                 else {
@@ -514,9 +590,9 @@ class Character {
         $(selElt).draggable( "destroy" );
         map.removeDisplayMove();
         $( '.ui-droppable' ).droppable( "destroy" );
-        map.board[this.line][this.column].removeConteneur(this);
-        map.board[newLine][newColumn].setConteneur(this);
-        this.updateCoordinatesConteneur();
+        map.board[this.line][this.column].removeConteneur(this);        
+        map.board[newLine][newColumn].setConteneur(this);        
+        this.updateCoordinatesConteneur(); 
         this.characterAround(map);
        
         // Simulation temporaire de tour par tour
@@ -579,6 +655,18 @@ class Character {
     // TO DO
     defend(target){
 
+    }
+
+    // Méthode qui retourne l'arme d'un conteneur s'il est présent sinon false
+    getWeapon(){
+        let inventory = this.conteneur;
+        let weapon="";
+            $.each(inventory,function(index,value) {
+                if (value instanceof Item && value.model==="weapon"){
+                    weapon = value;
+                }
+            });
+        return weapon;              
     }
 
     // TO DO
