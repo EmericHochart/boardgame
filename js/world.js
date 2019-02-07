@@ -6,7 +6,7 @@ const testMap = new Map(10,10,64,"medieval");
 $(function(){
 
     $('#playNow').one('click', function(){
-        testMap.initGame()
+        testMap.initGame(10,4,2);
     }
     );
 

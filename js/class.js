@@ -6,6 +6,8 @@ class Map {
         this.size = size;
         this.world = "../boardgame/assets/images/"+world+"/";
         this.board = new Array();
+        this.characters = new Array();
+        this.current = Math.floor(Math.random()*this.characters.length);
     }
 
     initGame(obstacles,weapon,player){
@@ -13,9 +15,8 @@ class Map {
         this.initObstacle(obstacles);
         this.initWeapon(weapon);
         this.initPlayer(player);
-        this.displayMap();
-        // Test déplacement
-        player1.deplace(this);
+        this.displayMap();        
+        this.start();
     }
     
     initMap(){
@@ -59,7 +60,6 @@ class Map {
                         if (value == weapon.name) {
                             square.conteneur[0].line = null;
                             square.conteneur[0].column = null;
-                            // là on vide complètement le conteneur : A AMELIORER
                             square.removeConteneur();
                             condition = true;
                         };
@@ -74,7 +74,9 @@ class Map {
     // TO DO : mettre des players différents
     initPlayer(player=2){ 
         let posPlayer = new Array();
+        // TO DO initialiser avec le json
         let weaponBasic = new Item("Epée en bois","woodSword.png",null,null,"weapon");
+        // Boucle sur les joueurs
         for (let p = 0 ; p < player ; p++) {
             let [x,y] = this.randomCoordinates();
             let square = this.board[x][y];
@@ -90,15 +92,11 @@ class Map {
                     // On place le joueur 1 dans le conteneur de la case
                     // A MODIFIER ................................................................
                     square.setConteneur(player1);
-                    // A MODIFIER : ajout de l'arme de base manuellement
-                    
+                    // A MODIFIER : ajout de l'arme de base manuellement                    
                     player1.setConteneur(weaponBasic);
                     posPlayer.push([x,y]);
-
-                    // Debug
-                    console.log("Joueur 1 : Brad");
-                    console.log([x,y]);
-                    
+                    this.characters.push(player1);
+                    this.displayUI(player1);
                 }
                 else {
                     // on vérifie que le joueur p n'est pas à côté d'un autre joueur
@@ -115,9 +113,9 @@ class Map {
                         // A MODIFIER : ajout de l'arme de base manuellement
                         player2.setConteneur(weaponBasic);
                         posPlayer.push([x,y]);
-                        // Debug
-                        console.log("Joueur 2 : Igor");
-                        console.log([x,y]);
+                        this.characters.push(player2);
+                        this.displayUI(player2);
+                        console.log(this.characters);
                     }
                     else {
                         p--;
@@ -125,8 +123,19 @@ class Map {
                 };
             };
         };
+
     }
     
+    // TO DO : affichage de l'UI d'un joueur in game
+    displayUI(player){
+        let uiElt=$('#ui-players');
+        let playerElt=$('<div/>').attr({id:'ui-'+player.name,class:'row'});
+        playerElt.html('<div class="col-md-3"><img src="'+this.world+player.image+'" width="64px" height="64px"></div><div class="col-md-6"><div class="row"><b>'+player.name+'</b></div><div class="progress md-progress"><div id="health-'+player.name+'" class="progress-bar" role="progressbar" style="width:'+player.health+'%" aria-valuenow="'+player.health+'" aria-valuemin="0" aria-valuemax="100"></div></div></div><div class="col-md-3"><img id="weapon-'+player.name+'" src="'+this.world+player.conteneur[0].image+'" width="64px" height="64px"></div>');
+        
+        playerElt.appendTo(uiElt);
+        $('<hr/>').appendTo(uiElt);
+    }
+
     displayMap(){
         let map = this;
         let boardElt = $('#board');
@@ -156,19 +165,64 @@ class Map {
 
     // TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     fight(player1,player2){
-        console.log("combat");
         player1.attack(player2);
-        player1.describe();
-        player2.describe();
-        if (player2.health>=0){
+        $('#health-'+player1.name).attr('aria-valuenow',player1.health).css('width',player1.health+"%");
+        $('#health-'+player2.name).attr('aria-valuenow',player2.health).css('width',player2.health+"%");
+        if (player2.health>0){
+            
             this.fight(player2,player1);
         }
         else {
-            alert("Combat terminé");
-        }
-        
+            
+            
+            let characters = this.characters;
+            
+            $.each(characters,function(index,value) {
+                if(value.health<=0) {
+                    characters.splice(index,1);
+                };
+            });
+            alert('Combat terminé');
+        }     
     }
 
+    // TO DO 
+    start(){
+        // Méthode de commencement du jeu après initialisation
+        // PSEUDO CODE : 
+        /*
+        
+        2° on récupère son indice dans le tableau characters et on incrémentera l'indice jusqu'à la fin du tableau puis on revient au début et ainsi de suite...
+        3° on fait une boucle while characters
+                explication :
+                A chaque mort on enlève le character du tableau.
+                tant que characters.length >1 c'est qu'il y a plus de 2 characters
+                Attention au cas nul : match nul à prévoir ...
+        4° dans la boucle :
+        pour le character : on appelle le deplacement
+        lui va générer le weaponOnpath, le StopMove, le character around
+        si pas combat on pars sur un nouveau character sinon
+        combat
+        si un mort on l'enlève du characters tableau
+        la boucle vérifie ensuite
+        
+        */
+       // Vérifier les valeurs ici
+        this.characters[this.current].deplace(this);
+
+
+    }
+
+    // TO DO 
+    updateCurrent(){
+        if (this.current == (this.characters.length - 1)) {
+            this.current = 0;
+        }
+        else 
+        {
+            this.current++;
+        };
+    }
 }
 
 class Case {
@@ -300,7 +354,19 @@ class Case {
         return weapon;
     }
 
-    // TO DO : 
+    // Méthode qui retourne le Character d'un conteneur s'il est présent sinon une chaîne vide 
+    getCharacter(){
+        let inventory = this.conteneur;
+        let character="";
+            $.each(inventory,function(index,value) {
+                if (value instanceof Character){
+                    character = value;
+                }
+            });
+        return character;
+    }
+
+    // TO DO : attention ici le getter met une arme aléatoire
     hasWeapon(model=null){
         let conteneur = this.conteneur;
         if(model===null) {
@@ -347,7 +413,7 @@ class Case {
 
     }
 
-    // TO DO
+    // TO DO : json à mettre en place
     randomItem(model){
         // ICI MODIFIER LE 4 et vérifier qu'il y a assez d'items demandés
         let aleatoire = Math.floor(Math.random()*4);
@@ -389,17 +455,14 @@ class Case {
         }
     }
 
-    // PROGRESS ........................................................................
-
+    
+    // Méthode qui regarde si une arme est sur le chemin entre la case et une position d'origine
+    // Normalement on doit pouvoir obtenir player dans la case ...
+    // TO DO Simplifier à l'aide d'une fonction le code redondant
     weaponOnPath(map,player,originLine,originColumn){
-        // Méthode qui regarde si une arme est sur le chemin
-        // besoin de la position actuelle et de l'ancienne
-        // Normalement on doit pouvoir obtenir player dans la case ...
-        
         let signLine = Math.sign(this.line-originLine);
         let signColumn = Math.sign(this.column-originColumn);
-        
-       
+               
         switch(signLine) {
             case 1 :
                 
@@ -412,6 +475,7 @@ class Case {
                         map.board[i][originColumn].setConteneur(weaponCharacter);
                         player.setConteneur(weaponConteneur);
                         $('#ConteneurL'+i+'C'+originColumn).css('background-image',"url('"+map.world+weaponCharacter.image+"')");
+                        $('#weapon-'+player.name).attr('src',map.world+weaponConteneur.image);
                         /// AFFICHAGE DE L'ARME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     }
                 };
@@ -427,6 +491,7 @@ class Case {
                         map.board[i][originColumn].setConteneur(weaponCharacter);
                         player.setConteneur(weaponConteneur);
                         $('#ConteneurL'+i+'C'+originColumn).css('background-image',"url('"+map.world+weaponCharacter.image+"')");
+                        $('#weapon-'+player.name).attr('src',map.world+weaponConteneur.image);
                     }
                 }
                 break;
@@ -443,6 +508,7 @@ class Case {
                                 map.board[originLine][j].setConteneur(weaponCharacter);
                                 player.setConteneur(weaponConteneur);
                                 $('#ConteneurL'+originLine+'C'+j).css('background-image',"url('"+map.world+weaponCharacter.image+"')");
+                                $('#weapon-'+player.name).attr('src',map.world+weaponConteneur.image);
                             }
                         }
                     break;
@@ -456,6 +522,7 @@ class Case {
                                 map.board[originLine][j].setConteneur(weaponCharacter);
                                 player.setConteneur(weaponConteneur);
                                 $('#ConteneurL'+originLine+'C'+j).css('background-image',"url('"+map.world+weaponCharacter.image+"')");
+                                $('#weapon-'+player.name).attr('src',map.world+weaponConteneur.image);
                             }
                         }
                     break;
@@ -463,9 +530,7 @@ class Case {
                 break;
         }
 
-    }
-
-    
+    }    
 
 }
 
@@ -481,15 +546,13 @@ class Character {
         this.conteneur = null;
     }
 
-    // TO DO
+    // TO DO : mettre en relation avec l'UI player
     describe(){
         let plural = (this.health==0)?"":"s";
         return console.log(`${this.name} a ${this.health} point${plural} de vie et ${this.strength} points de force. Sa position est ${this.line},${this.column}`);
         
     }
-
     
-    // TO DO : ajouter condition sur joueur adverse !!!!!!!    
     deplace(map){
         let player = this;
         let line = this.line;
@@ -584,7 +647,7 @@ class Character {
    
     }
 
-    // TO DO : améliorer
+    // TO DO : Gérer le tour par tour 
     stopMove(map,newLine,newColumn){
         let selElt = '#'+this.name; 
         $(selElt).draggable( "destroy" );
@@ -594,36 +657,33 @@ class Character {
         map.board[newLine][newColumn].setConteneur(this);        
         this.updateCoordinatesConteneur(); 
         this.characterAround(map);
-       
-        // Simulation temporaire de tour par tour
-        if (player1.health>=0&&player2.health>=0) {
-            if (this===player1) {
-                player2.deplace(map);}
-            else {
-                    player1.deplace(map);
-            };
-        };  
+        
+       //Tour par tour
+       // let characters = map.characters;
+       if (map.characters.length>1) {
+            map.updateCurrent();    
+            map.characters[map.current].deplace(map);
+        }; 
     }
 
-    // TO DO
+    // TO DO : gestion du tour par tour 
+    // TO DO : cas où plusieurs joueurs sont autour
     characterAround(map){
         
-        // Nous choisissons de vérifier les 4 cases autour plutôt que de regarder par rapport à chaque joueur
-        
-
-        let characters = new Array();
+        // Nous choisissons de vérifier les 4 cases autour plutôt que de regarder par rapport à chaque joueur        
+        let nextTurn=true;
 
         if (this.column+1<=map.maxColumn-1) {
-            map.board[this.line][this.column+1].hasPlayer()? map.fight(player1,player2) : console.log("test");          
+            map.board[this.line][this.column+1].hasPlayer()? map.fight(this,map.board[this.line][this.column+1].getCharacter()) : console.log("Pas d'ennemis à côté");          
         };
         if (this.column-1>=0) {
-            map.board[this.line][this.column-1].hasPlayer()? map.fight(player1,player2) : console.log("test");
+            map.board[this.line][this.column-1].hasPlayer()? map.fight(this,map.board[this.line][this.column-1].getCharacter()) : console.log("Pas d'ennemis à côté");
         };
         if (this.line+1<=map.maxLine-1) {
-            map.board[this.line+1][this.column].hasPlayer()? map.fight(player1,player2) : console.log("test");
+            map.board[this.line+1][this.column].hasPlayer()? map.fight(this,map.board[this.line+1][this.column].getCharacter()) : console.log("Pas d'ennemis à côté");
         };
         if (this.line-1>=0) {
-            map.board[this.line-1][this.column].hasPlayer()? map.fight(player1,player2) : console.log("test");
+            map.board[this.line-1][this.column].hasPlayer()? map.fight(this,map.board[this.line-1][this.column].getCharacter()) : console.log("Pas d'ennemis à côté");
         };
         
 
@@ -631,7 +691,7 @@ class Character {
         
     }
 
-    // TO DO
+    // TO DO : gestion du combat et de l'attaque
     attack(target){
         // Définition d'une attaque réussi sur le principe du pile ou face et/ou du bandit manchot ?
         let faceToFace = [];
@@ -645,6 +705,7 @@ class Character {
             let damage = this.strength;
             // Calcul de la vie de la cible
             target.health-= damage;
+                     
             return console.log(`${this.name} a attaqué ${target.name} qui perd ${damage} de vie. Ses points de vie sont réduits à ${target.health}.`);
         }
         else {
@@ -652,12 +713,20 @@ class Character {
         }
     }
 
-    // TO DO
+    // Update du champ Heal du character
+    // Fonctionne ???????
+    updateHealth(){
+        let healthElt = $('#health-'+this.name);
+        healthElt.attr('aria-valuenow',this.health).css('width',this.health+"%");
+    }
+
+    // TO DO : gestion du combat et de la défense
     defend(target){
 
     }
 
-    // Méthode qui retourne l'arme d'un conteneur s'il est présent sinon false
+    // Méthode qui retourne l'arme de l'inventaire du joueur s'il est présent sinon false
+    // TO DO : pour l'instant une seule arme dans l'inventaire, à améliorer pour avoir plusieurs armes dont une équipée
     getWeapon(){
         let inventory = this.conteneur;
         let weapon="";
@@ -669,7 +738,8 @@ class Character {
         return weapon;              
     }
 
-    // TO DO
+    // Méthode qui ajoute un élément dans l'inventaire du joueur
+    // TO DO : vérification pour ne pas mettre des objets incongrus (par exemple un autre joueur ... encore que ...)
     setConteneur(element){
         if(this.conteneur===null) {
             this.conteneur = new Array();
@@ -679,6 +749,7 @@ class Character {
         this.conteneur.push(element);        
     }
 
+    // Méthode qui vide l'inventaire ou un item particulier
     // TO DO : A améliorer
     removeConteneur(element=null){
         if(element===null) {
@@ -698,7 +769,7 @@ class Character {
         };
     }
 
-    // TO DO : A améliorer
+    // Méthode qui met à jour les coordonnées des items dans l'inventaire du joueur
     updateCoordinatesConteneur(){
         let player = this;
         $.each(player.conteneur,function(index,value) {
@@ -708,6 +779,8 @@ class Character {
     }
 }
 
+// Model prend pour l'instant la valeur weapon uniquement
+// TO DO : extend item à wepaon ?
 class Item{
     
     constructor(name,image,line,column,model){

@@ -159,7 +159,7 @@
                 <form name="">
                   <!-- Heading -->
                   <h3 class="dark-grey-text text-center">
-                    <strong>Nous écrire:</strong>
+                    <strong>Joueur 1 :</strong>
                   </h3>
                   <hr>
 
@@ -168,25 +168,12 @@
                     <input type="text" id="form3" class="form-control">
                     <label for="form3">Votre nom</label>
                   </div>
-                  <div class="md-form">
-                    <i class="fas fa-envelope prefix grey-text"></i>
-                    <input type="text" id="form2" class="form-control">
-                    <label for="form2">Votre email</label>
-                  </div>
-
-                  <div class="md-form">
-                    <i class="fas fa-pencil-alt prefix grey-text"></i>
-                    <textarea type="text" id="form8" class="md-textarea"></textarea>
-                    <label for="form8">Votre message</label>
-                  </div>
+                  
 
                   <div class="text-center">
                     <button class="btn btn-indigo">Envoyer</button>
-                    <hr>
-                    <fieldset class="form-check">
-                      <input type="checkbox" class="form-check-input" id="checkbox1">
-                      <label for="checkbox1" class="form-check-label dark-grey-text">Souscrire à ma Newsletter</label>
-                    </fieldset>
+                  
+                    
                   </div>
 
                 </form>
@@ -216,39 +203,23 @@
   <main>
     <div class="container">
 
-      <!--Section: Main info-->
+      <!--Section: Main -->
       <section class="mt-5 wow fadeIn">
 
-        <!--Grid row-->
+        <!--Game-->
         <div class="row">
 
-          <!--Grid column-->
+          <!--Board-->
           <div class="col-md-8 mb-4">
             <div id="board"><img src="https://images.unsplash.com/photo-1543338227-5cab7f6c9af3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80" class="img-fluid z-depth-1-half" alt=""></div>
-            
-
           </div>
-          <!--Grid column-->
+          <!--Board-->
 
-          <!--Grid column-->
-          <div class="col-md-4 mb-4">
-
-            <!-- Main heading -->
-            <h3 class="h3 mb-3">Interface Utilisateur</h3>
-            <p>Cette partie est réservée à l'affichage des joueurs (
-              <strong>Boardagme</strong> ) et leur inventaire.</p>
-            <p>Développement prochainement ...</p>
-            <!-- Main heading -->
-
-            <hr>
-
-            <p>
-              <strong>1</strong> photo de l'avatar,
-              <strong>1</strong> barre de vie,
-              <strong>2</strong> boutons Attaque et Défense.
-              <strong>Bientôt...</strong>
-            </p>
-
+          <!--Interface UI in Game-->
+          <div id="ui-players" class="col-md-4 mb-4">
+            <h3>Start !</h3>
+            <hr/>
+            
             <!-- CTA -->
             <a target="_blank" href="" class="btn btn-indigo btn-md">Attaquer
               <i class="fas fa-bullseye ml-1"></i>
@@ -256,15 +227,16 @@
             <a target="_blank" href="" class="btn btn-indigo btn-md">Défendre
               <i class="fas fa-shield-alt ml-1"></i>
             </a>
-
+            <hr/>
+            <!-- Joueurs -->  
           </div>
-          <!--Grid column-->
+          <!--Interface UI in Game-->
 
         </div>
-        <!--Grid row-->
+        <!--Game-->
 
       </section>
-      <!--Section: Main info-->
+      <!--Section: Main -->
 
       <hr class="my-5" id="aboutboardgame">
 
@@ -500,7 +472,7 @@
               </div>
               <div class="col-10 mb-2">
                 <h5 class="feature-title font-bold mb-1">Carte</h5>
-                <p class="grey-text mt-2">Configurez les dimensions de la carte et le nombre d'obstacles.
+                <p class="grey-text mt-2">Configurez la carte et le nombre d'obstacles.
                 </p>
               </div>
             </div>
