@@ -164,26 +164,82 @@ class Map {
     }
 
     // TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // PROBLEME FONCTION RECURSIVE
     fight(player1,player2){
-        player1.attack(player2);
-        $('#health-'+player1.name).attr('aria-valuenow',player1.health).css('width',player1.health+"%");
-        $('#health-'+player2.name).attr('aria-valuenow',player2.health).css('width',player2.health+"%");
-        if (player2.health>0){
+        let map = this ;
+        let characters = this.characters;
+        
+        $(function(){
+
             
-            this.fight(player2,player1);
-        }
-        else {
-            
-            
-            let characters = this.characters;
-            
-            $.each(characters,function(index,value) {
-                if(value.health<=0) {
-                    characters.splice(index,1);
-                };
-            });
-            alert('Combat terminé');
-        }     
+            $('.ui-draggable').draggable( "destroy" );
+            map.removeDisplayMove();
+            $( '.ui-droppable' ).droppable( "destroy" );
+
+            $('#ui-players>h3').html(player1.name+ " : A vous de jouer !");    
+            // On attend qu'il appuie sur attaque 
+            $('#attack').on('click', function(){
+                $('#ui-players>h3').html(player1.name+" attaque !");
+                $('#health-'+player1.name).attr('aria-valuenow',player1.health).css('width',player1.health+"%");
+                $('#health-'+player2.name).attr('aria-valuenow',player2.health).css('width',player2.health+"%");
+                //$('#health-'+player1.name).css('background-image','linear-gradient(to left, #ff0000 '+player1.health+'%, #0d7ef0 '+(player2.strength*player1.shield)+'%)');
+                //$('#health-'+player2.name).css('background-image','linear-gradient(to left, #ff0000 '+player2.health+'%, #0d7ef0 '+(player1.strength*player2.shield)+'%)');
+                player1.attack(player2)
+                $('#health-'+player1.name).attr('aria-valuenow',player1.health).css('width',player1.health+"%");
+                $('#health-'+player2.name).attr('aria-valuenow',player2.health).css('width',player2.health+"%");
+                //$('#health-'+player1.name).css('background-image','linear-gradient(to left, #ff0000 '+player1.health+'%, #0d7ef0 '+(player2.strength*player1.shield)+'%)');
+                //$('#health-'+player2.name).css('background-image','linear-gradient(to left, #ff0000 '+player2.health+'%, #0d7ef0 '+(player1.strength*player2.shield)+'%)');
+                $('#attack').off('click');
+                $('#defense').off('click');
+                               
+                
+                if (player2.health<=0){
+                                
+                                $.each(characters,function(index,value) {
+
+                                if (typeof value === "undefined") {
+                                    characters.splice(index,1);
+                                }
+                                else if(value.health<=0) {
+                                    characters.splice(index,1);
+                                };
+                            
+                            });
+                            $('#ui-players>h3').html(player1.name+" a gagné");
+                            alert('Combat terminé');
+                    
+                            }
+                            else {
+                                
+                                map.fight(player2,player1);
+                                
+                            };        
+            }
+            );
+
+            // On attend qu'il appuie sur défense 
+            $('#defense').on('click', function(){
+                $('#ui-players>h3').html(player1.name+" se défend !");
+                player1.defend();
+                $('#health-'+player1.name).attr('aria-valuenow',player1.health).css('width',player1.health+"%");
+                $('#health-'+player2.name).attr('aria-valuenow',player2.health).css('width',player2.health+"%");
+                //$('#health-'+player1.name).css('background-image','linear-gradient(to left, #ff0000 '+player1.health+'%, #0d7ef0 '+(player2.strength*player1.shield)+'%)');
+                $('#defense').off('click');
+                $('#attack').off('click');
+                          
+                
+                
+                
+                
+                map.fight(player2,player1);
+                                  
+            }
+            );    
+        
+        });
+        
+        
+             
     }
 
     // TO DO 
@@ -544,6 +600,7 @@ class Character {
         this.line = line;
         this.column = column;
         this.conteneur = null;
+        this.shield = 0;
     }
 
     // TO DO : mettre en relation avec l'UI player
@@ -656,14 +713,7 @@ class Character {
         map.board[this.line][this.column].removeConteneur(this);        
         map.board[newLine][newColumn].setConteneur(this);        
         this.updateCoordinatesConteneur(); 
-        this.characterAround(map);
-        
-       //Tour par tour
-       // let characters = map.characters;
-       if (map.characters.length>1) {
-            map.updateCurrent();    
-            map.characters[map.current].deplace(map);
-        }; 
+        this.characterAround(map);       
     }
 
     // TO DO : gestion du tour par tour 
@@ -671,20 +721,30 @@ class Character {
     characterAround(map){
         
         // Nous choisissons de vérifier les 4 cases autour plutôt que de regarder par rapport à chaque joueur        
-        let nextTurn=true;
-
+        let nextTurn=false;
+        
         if (this.column+1<=map.maxColumn-1) {
-            map.board[this.line][this.column+1].hasPlayer()? map.fight(this,map.board[this.line][this.column+1].getCharacter()) : console.log("Pas d'ennemis à côté");          
+            map.board[this.line][this.column+1].hasPlayer()? map.fight(this,map.board[this.line][this.column+1].getCharacter()) : nextTurn=true;          
         };
         if (this.column-1>=0) {
-            map.board[this.line][this.column-1].hasPlayer()? map.fight(this,map.board[this.line][this.column-1].getCharacter()) : console.log("Pas d'ennemis à côté");
+            map.board[this.line][this.column-1].hasPlayer()? map.fight(this,map.board[this.line][this.column-1].getCharacter()) : nextTurn=true;;
         };
         if (this.line+1<=map.maxLine-1) {
-            map.board[this.line+1][this.column].hasPlayer()? map.fight(this,map.board[this.line+1][this.column].getCharacter()) : console.log("Pas d'ennemis à côté");
+            map.board[this.line+1][this.column].hasPlayer()? map.fight(this,map.board[this.line+1][this.column].getCharacter()) : nextTurn=true;;
         };
         if (this.line-1>=0) {
-            map.board[this.line-1][this.column].hasPlayer()? map.fight(this,map.board[this.line-1][this.column].getCharacter()) : console.log("Pas d'ennemis à côté");
+            map.board[this.line-1][this.column].hasPlayer()? map.fight(this,map.board[this.line-1][this.column].getCharacter()) : nextTurn=true;;
         };
+        if (nextTurn == true){
+            if (map.characters.length>1) {
+            map.updateCurrent();    
+            map.characters[map.current].deplace(map);
+            }
+            else {
+                console.log("bug ???");
+            }; 
+        }
+        
         
 
         
@@ -693,6 +753,7 @@ class Character {
 
     // TO DO : gestion du combat et de l'attaque
     attack(target){
+        /* Désactivation temporaire du bandit manchot 
         // Définition d'une attaque réussi sur le principe du pile ou face et/ou du bandit manchot ?
         let faceToFace = [];
         for (let i = 0 ; i < 3 ; i++) {
@@ -710,7 +771,15 @@ class Character {
         }
         else {
             return console.log(`${this.name} a raté son attaque sur ${target.name}.`);
-        }
+        }*/
+        
+        let damage = this.strength*(1-target.shield);
+        // Calcul de la vie de la cible
+        target.health-= damage;
+        target.shield = 0;
+                     
+        return console.log(`${this.name} a attaqué ${target.name} qui perd ${damage} de vie. Ses points de vie sont réduits à ${target.health}.`);
+
     }
 
     // Update du champ Heal du character
@@ -721,7 +790,9 @@ class Character {
     }
 
     // TO DO : gestion du combat et de la défense
-    defend(target){
+    defend(){
+
+        this.shield=0.5;       
 
     }
 

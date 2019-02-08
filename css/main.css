@@ -26,3 +26,16 @@
 #ui-players {
     padding-left: 55px;
 }
+.progress-bar {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #ff0000;    
+    transition: width 0.6s ease;
+  }

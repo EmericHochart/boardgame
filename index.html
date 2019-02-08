@@ -159,17 +159,20 @@
                 <form name="">
                   <!-- Heading -->
                   <h3 class="dark-grey-text text-center">
-                    <strong>Joueur 1 :</strong>
+                    <strong>Joueurs :</strong>
                   </h3>
                   <hr>
 
                   <div class="md-form">
                     <i class="fas fa-user prefix grey-text"></i>
-                    <input type="text" id="form3" class="form-control">
-                    <label for="form3">Votre nom</label>
+                    <input type="text" id="formPlayer1" class="form-control">
+                    <label for="formPlayer1">Joueur 1</label>
                   </div>
-                  
-
+                  <div class="md-form">
+                    <i class="fas fa-user prefix grey-text"></i>
+                    <input type="text" id="formPlayer2" class="form-control">
+                    <label for="formPlayer2">Joueur 2</label>
+                  </div>
                   <div class="text-center">
                     <button class="btn btn-indigo">Envoyer</button>
                   
@@ -221,12 +224,12 @@
             <hr/>
             
             <!-- CTA -->
-            <a target="_blank" href="" class="btn btn-indigo btn-md">Attaquer
+            <button id="attack" class="btn btn-indigo btn-md">Attaquer
               <i class="fas fa-bullseye ml-1"></i>
-            </a>
-            <a target="_blank" href="" class="btn btn-indigo btn-md">Défendre
+            </button>
+            <button id="defense" class="btn btn-indigo btn-md">Défendre
               <i class="fas fa-shield-alt ml-1"></i>
-            </a>
+            </button>
             <hr/>
             <!-- Joueurs -->  
           </div>
