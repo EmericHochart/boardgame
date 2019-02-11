@@ -39,3 +39,9 @@
     background-color: #ff0000;    
     transition: width 0.6s ease;
   }
+.damage span {
+    color : red;    
+}
+.damage {
+    text-align: center;
+}

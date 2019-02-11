@@ -17,8 +17,7 @@ class Map {
         this.initPlayer(player);
         this.displayMap();        
         this.start();
-    }
-    
+    }    
     initMap(){
         for (let i = 0 ; i < this.maxLine ; i++) {
             this.board[i] = new Array();
@@ -28,15 +27,13 @@ class Map {
             }
         };
     }
-
     initObstacle(percentage=10){
         percentage = (percentage>25)?25:percentage;
         for (let k = 0 ; k < (percentage/100*this.maxLine*this.maxColumn) ; k++) {
             let [x,y] = this.randomCoordinates();
             (!this.board[x][y].isEmpty())?k--:this.board[x][y].isObstacle(true);
         };
-    }
-    
+    }    
     // TO DO 
     // ATTENTION ici on place l'arme sur une case vide et sans conteneur, l'arme est unique
     initWeapon(amount=4){
@@ -69,7 +66,6 @@ class Map {
             };
         };
     }
-
     // TO DO : vérifier que le nombre de joueurs n'est pas trop grand 
     // TO DO : mettre des players différents
     initPlayer(player=2){ 
@@ -114,8 +110,7 @@ class Map {
                         player2.setConteneur(weaponBasic);
                         posPlayer.push([x,y]);
                         this.characters.push(player2);
-                        this.displayUI(player2);
-                        console.log(this.characters);
+                        this.displayUI(player2);                        
                     }
                     else {
                         p--;
@@ -124,18 +119,14 @@ class Map {
             };
         };
 
-    }
-    
-    // TO DO : affichage de l'UI d'un joueur in game
+    }        
     displayUI(player){
         let uiElt=$('#ui-players');
         let playerElt=$('<div/>').attr({id:'ui-'+player.name,class:'row'});
-        playerElt.html('<div class="col-md-3"><img src="'+this.world+player.image+'" width="64px" height="64px"></div><div class="col-md-6"><div class="row"><b>'+player.name+'</b></div><div class="progress md-progress"><div id="health-'+player.name+'" class="progress-bar" role="progressbar" style="width:'+player.health+'%" aria-valuenow="'+player.health+'" aria-valuemin="0" aria-valuemax="100"></div></div></div><div class="col-md-3"><img id="weapon-'+player.name+'" src="'+this.world+player.conteneur[0].image+'" width="64px" height="64px"></div>');
-        
+        playerElt.html('<div class="col-md-3"><img id="avatar-'+player.name+'" src="'+this.world+player.image+'" width="64px" height="64px"></div><div class="col-md-6"><div class="row"><b>'+player.name+'</b></div><div class="progress md-progress"><div id="health-'+player.name+'" class="progress-bar" role="progressbar" style="width:'+player.health+'%" aria-valuenow="'+player.health+'" aria-valuemin="0" aria-valuemax="100"></div></div><div class="damage"><span id="damage-'+player.name+'"></span></div></div><div class="col-md-3"><img id="weapon-'+player.name+'" data-toggle="tooltip" title="'+player.conteneur[0].name+'" src="'+this.world+player.conteneur[0].image+'" width="64px" height="64px"></div>');
         playerElt.appendTo(uiElt);
         $('<hr/>').appendTo(uiElt);
     }
-
     displayMap(){
         let map = this;
         let boardElt = $('#board');
@@ -161,10 +152,7 @@ class Map {
         let x = Math.floor(Math.random()*this.maxLine);
         let y = Math.floor(Math.random()*this.maxColumn);
         return [x,y];
-    }
-
-    // TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // PROBLEME FONCTION RECURSIVE
+    }    
     fight(player1,player2){
         let map = this ;
         let characters = this.characters;
@@ -176,19 +164,13 @@ class Map {
             map.removeDisplayMove();
             $( '.ui-droppable' ).droppable( "destroy" );
 
-            $('#ui-players>h3').html(player1.name+ " : A vous de jouer !");    
+            $('#ui-players>h3').html(player1.name+ " : A vous de jouer !");  
             // On attend qu'il appuie sur attaque 
             $('#attack').on('click', function(){
                 $('#ui-players>h3').html(player1.name+" attaque !");
-                $('#health-'+player1.name).attr('aria-valuenow',player1.health).css('width',player1.health+"%");
-                $('#health-'+player2.name).attr('aria-valuenow',player2.health).css('width',player2.health+"%");
-                //$('#health-'+player1.name).css('background-image','linear-gradient(to left, #ff0000 '+player1.health+'%, #0d7ef0 '+(player2.strength*player1.shield)+'%)');
-                //$('#health-'+player2.name).css('background-image','linear-gradient(to left, #ff0000 '+player2.health+'%, #0d7ef0 '+(player1.strength*player2.shield)+'%)');
-                player1.attack(player2)
-                $('#health-'+player1.name).attr('aria-valuenow',player1.health).css('width',player1.health+"%");
-                $('#health-'+player2.name).attr('aria-valuenow',player2.health).css('width',player2.health+"%");
-                //$('#health-'+player1.name).css('background-image','linear-gradient(to left, #ff0000 '+player1.health+'%, #0d7ef0 '+(player2.strength*player1.shield)+'%)');
-                //$('#health-'+player2.name).css('background-image','linear-gradient(to left, #ff0000 '+player2.health+'%, #0d7ef0 '+(player1.strength*player2.shield)+'%)');
+                player1.attack(player2)   
+                player2.updateHealth();
+
                 $('#attack').off('click');
                 $('#defense').off('click');
                                
@@ -206,8 +188,8 @@ class Map {
                             
                             });
                             $('#ui-players>h3').html(player1.name+" a gagné");
-                            alert('Combat terminé');
-                    
+                            $('#avatar-'+player2.name).attr('src',map.world+"grave.png");
+                                                                          
                             }
                             else {
                                 
@@ -221,9 +203,10 @@ class Map {
             $('#defense').on('click', function(){
                 $('#ui-players>h3').html(player1.name+" se défend !");
                 player1.defend();
-                $('#health-'+player1.name).attr('aria-valuenow',player1.health).css('width',player1.health+"%");
-                $('#health-'+player2.name).attr('aria-valuenow',player2.health).css('width',player2.health+"%");
-                //$('#health-'+player1.name).css('background-image','linear-gradient(to left, #ff0000 '+player1.health+'%, #0d7ef0 '+(player2.strength*player1.shield)+'%)');
+                player1.updateHealth(player2.strength*player1.shield);
+                //$('#health-'+player1.name).attr('aria-valuenow',(player1.health)).css('width',(player1.health)+"px");                
+                //$('#health-'+player1.name).css('background-image','linear-gradient(to right, #ff0000 '+(player1.health-(player2.strength*player1.shield))+'px, #0d7ef0 '+(player2.strength*player1.shield)+'px)');
+                
                 $('#defense').off('click');
                 $('#attack').off('click');
                           
@@ -241,35 +224,9 @@ class Map {
         
              
     }
-
-    // TO DO 
     start(){
-        // Méthode de commencement du jeu après initialisation
-        // PSEUDO CODE : 
-        /*
-        
-        2° on récupère son indice dans le tableau characters et on incrémentera l'indice jusqu'à la fin du tableau puis on revient au début et ainsi de suite...
-        3° on fait une boucle while characters
-                explication :
-                A chaque mort on enlève le character du tableau.
-                tant que characters.length >1 c'est qu'il y a plus de 2 characters
-                Attention au cas nul : match nul à prévoir ...
-        4° dans la boucle :
-        pour le character : on appelle le deplacement
-        lui va générer le weaponOnpath, le StopMove, le character around
-        si pas combat on pars sur un nouveau character sinon
-        combat
-        si un mort on l'enlève du characters tableau
-        la boucle vérifie ensuite
-        
-        */
-       // Vérifier les valeurs ici
         this.characters[this.current].deplace(this);
-
-
-    }
-
-    // TO DO 
+    }    
     updateCurrent(){
         if (this.current == (this.characters.length - 1)) {
             this.current = 0;
@@ -295,7 +252,7 @@ class Case {
         let ligneElt = '#L'+this.line;
         let caseElt = $('<div/>').attr({id:'L'+this.line+'C'+this.column,class:'case'});
         this.setCaseSize(map,caseElt);
-        this.setBackground(map,caseElt,this.image);  
+        this.setBackground(map,caseElt,this.image);
         caseElt.appendTo(ligneElt);              
     }
     displayMove(map){
@@ -311,8 +268,6 @@ class Case {
     setBackground(map,elt,image){
         elt.css('background-image', "url('"+map.world+image+"')");
     }
-
-
     // TO DO : gestion de plusieurs éléments dans le conteneur
     displayConteneur(map){
         
@@ -368,7 +323,6 @@ class Case {
             });    
         };
     }
-
     // Méthode qui ajoute un élément dans le conteneur
     setConteneur(element){
         if(this.conteneur===null) {
@@ -378,7 +332,6 @@ class Case {
         element.column = this.column;
         this.conteneur.push(element);        
     }
-
     // Méthode qui vide entièrement le conteneur ou enlève un élément précis du conteneur
     removeConteneur(element=null){
         if(element===null) {
@@ -397,7 +350,6 @@ class Case {
             return false;
         };
     }
-
     // Méthode qui retourne la dernière arme d'un conteneur s'il est présent sinon une chaîne vide 
     getWeapon(){
         let inventory = this.conteneur;
@@ -409,7 +361,6 @@ class Case {
             });
         return weapon;
     }
-
     // Méthode qui retourne le Character d'un conteneur s'il est présent sinon une chaîne vide 
     getCharacter(){
         let inventory = this.conteneur;
@@ -421,7 +372,6 @@ class Case {
             });
         return character;
     }
-
     // TO DO : attention ici le getter met une arme aléatoire
     hasWeapon(model=null){
         let conteneur = this.conteneur;
@@ -442,8 +392,7 @@ class Case {
         else { 
             this.setConteneur(this.randomItem("weapon"));
         }
-    }
-  
+    }  
     // REVOIR la méthode
     // TO DO : Setter
     hasPlayer(player=null){
@@ -468,7 +417,6 @@ class Case {
         }
 
     }
-
     // TO DO : json à mettre en place
     randomItem(model){
         // ICI MODIFIER LE 4 et vérifier qu'il y a assez d'items demandés
@@ -491,7 +439,6 @@ class Case {
             break;
         }
     }
-
     isEmpty(ground=null){
         if(ground===null) {
             return (this.ground==0)?true:false;
@@ -509,9 +456,7 @@ class Case {
             this.ground = -1;
             this.image = "obstacle.png";
         }
-    }
-
-    
+    }    
     // Méthode qui regarde si une arme est sur le chemin entre la case et une position d'origine
     // Normalement on doit pouvoir obtenir player dans la case ...
     // TO DO Simplifier à l'aide d'une fonction le code redondant
@@ -532,6 +477,8 @@ class Case {
                         player.setConteneur(weaponConteneur);
                         $('#ConteneurL'+i+'C'+originColumn).css('background-image',"url('"+map.world+weaponCharacter.image+"')");
                         $('#weapon-'+player.name).attr('src',map.world+weaponConteneur.image);
+                        $('#weapon-'+player.name).attr('title',weaponConteneur.name);
+
                         /// AFFICHAGE DE L'ARME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     }
                 };
@@ -548,6 +495,7 @@ class Case {
                         player.setConteneur(weaponConteneur);
                         $('#ConteneurL'+i+'C'+originColumn).css('background-image',"url('"+map.world+weaponCharacter.image+"')");
                         $('#weapon-'+player.name).attr('src',map.world+weaponConteneur.image);
+                        $('#weapon-'+player.name).attr('title',weaponConteneur.name);
                     }
                 }
                 break;
@@ -565,6 +513,7 @@ class Case {
                                 player.setConteneur(weaponConteneur);
                                 $('#ConteneurL'+originLine+'C'+j).css('background-image',"url('"+map.world+weaponCharacter.image+"')");
                                 $('#weapon-'+player.name).attr('src',map.world+weaponConteneur.image);
+                                $('#weapon-'+player.name).attr('title',weaponConteneur.name);
                             }
                         }
                     break;
@@ -579,6 +528,7 @@ class Case {
                                 player.setConteneur(weaponConteneur);
                                 $('#ConteneurL'+originLine+'C'+j).css('background-image',"url('"+map.world+weaponCharacter.image+"')");
                                 $('#weapon-'+player.name).attr('src',map.world+weaponConteneur.image);
+                                $('#weapon-'+player.name).attr('title',weaponConteneur.name);
                             }
                         }
                     break;
@@ -586,8 +536,7 @@ class Case {
                 break;
         }
 
-    }    
-
+    }
 }
 
 class Character {
@@ -601,15 +550,7 @@ class Character {
         this.column = column;
         this.conteneur = null;
         this.shield = 0;
-    }
-
-    // TO DO : mettre en relation avec l'UI player
-    describe(){
-        let plural = (this.health==0)?"":"s";
-        return console.log(`${this.name} a ${this.health} point${plural} de vie et ${this.strength} points de force. Sa position est ${this.line},${this.column}`);
-        
-    }
-    
+    }    
     deplace(map){
         let player = this;
         let line = this.line;
@@ -635,9 +576,17 @@ class Character {
                                                 player.stopMove(map,line,column+i);
                                             } 
                                         });
+                    
+                    if((line+1)<=(map.maxLine-1)&&map.board[line+1][column+i].hasPlayer()==true){
+                        break;
+                    }
+                    else if((line-1)>=0&&map.board[line-1][column+i].hasPlayer()==true){
+                        break;
+                    };                   
+                                        
                 }
                 else {
-                    i = 4;
+                    break;
                 }
             }
         }
@@ -655,9 +604,17 @@ class Character {
                                                 player.stopMove(map,line,column+i);
                                             }
                                         });
+
+                    if((line+1)<=(map.maxLine-1)&&map.board[line+1][column+i].hasPlayer()==true){
+                        break;
+                    }
+                    else if((line-1)>=0&&map.board[line-1][column+i].hasPlayer()==true){
+                        break;
+                    };
+
                 }
                 else {
-                    i = -4;
+                    break;
                 }
             }
         }
@@ -675,9 +632,16 @@ class Character {
                                                 player.stopMove(map,line+j,column);
                                             }
                                         });
+                    if((column+1)<=(map.maxColumn-1)&&map.board[line+j][column+1].hasPlayer()==true){
+                        break;
+                    }
+                    else if((column-1)>=0&&map.board[line+j][column-1].hasPlayer()==true){
+                        break;
+                    };
+
                 }
                 else {
-                    j = -4;
+                    break;
                 }
             }
         }
@@ -695,16 +659,22 @@ class Character {
                                                 player.stopMove(map,line+j,column);
                                             }
                                         });
+            
+                    if((column+1)<=(map.maxColumn-1)&&map.board[line+j][column+1].hasPlayer()==true){
+                        break;
+                    }
+                    else if((column-1)>=0&&map.board[line+j][column-1].hasPlayer()==true){
+                        break;
+                    };
+                            
                 }
                 else {
-                    j = 4;
+                    break;
                 }
             }
         }
    
     }
-
-    // TO DO : Gérer le tour par tour 
     stopMove(map,newLine,newColumn){
         let selElt = '#'+this.name; 
         $(selElt).draggable( "destroy" );
@@ -715,8 +685,6 @@ class Character {
         this.updateCoordinatesConteneur(); 
         this.characterAround(map);       
     }
-
-    // TO DO : gestion du tour par tour 
     // TO DO : cas où plusieurs joueurs sont autour
     characterAround(map){
         
@@ -750,8 +718,6 @@ class Character {
         
         
     }
-
-    // TO DO : gestion du combat et de l'attaque
     attack(target){
         /* Désactivation temporaire du bandit manchot 
         // Définition d'une attaque réussi sur le principe du pile ou face et/ou du bandit manchot ?
@@ -774,28 +740,32 @@ class Character {
         }*/
         
         let damage = this.strength*(1-target.shield);
+        // Animation dégats
+        $('#damage-'+target.name).html(' '+damage+' ');
+        $('#damage-'+target.name).fadeIn('slow');
+        $('#damage-'+target.name).fadeOut('slow');
         // Calcul de la vie de la cible
         target.health-= damage;
         target.shield = 0;
-                     
-        return console.log(`${this.name} a attaqué ${target.name} qui perd ${damage} de vie. Ses points de vie sont réduits à ${target.health}.`);
 
     }
-
     // Update du champ Heal du character
     // Fonctionne ???????
-    updateHealth(){
+    updateHealth(shield=null){
         let healthElt = $('#health-'+this.name);
-        healthElt.attr('aria-valuenow',this.health).css('width',this.health+"%");
+        
+        if (shield===null){
+            healthElt.attr('aria-valuenow',this.health).css('width',this.health+"%");
+            $('#health-'+this.name).css('background-image','none');
+        }
+        else {
+            healthElt.attr('aria-valuenow',this.health).css('width',this.health+"%");
+            $('#health-'+this.name).css('background-image','linear-gradient(to right, #ff0000 '+((this.health-shield)*100/this.health)+'%, #0d7ef0 '+(shield*100/this.health)+'%)');
+        }
     }
-
-    // TO DO : gestion du combat et de la défense
     defend(){
-
         this.shield=0.5;       
-
     }
-
     // Méthode qui retourne l'arme de l'inventaire du joueur s'il est présent sinon false
     // TO DO : pour l'instant une seule arme dans l'inventaire, à améliorer pour avoir plusieurs armes dont une équipée
     getWeapon(){
@@ -808,7 +778,6 @@ class Character {
             });
         return weapon;              
     }
-
     // Méthode qui ajoute un élément dans l'inventaire du joueur
     // TO DO : vérification pour ne pas mettre des objets incongrus (par exemple un autre joueur ... encore que ...)
     setConteneur(element){
@@ -819,7 +788,6 @@ class Character {
         element.column = this.column;
         this.conteneur.push(element);        
     }
-
     // Méthode qui vide l'inventaire ou un item particulier
     // TO DO : A améliorer
     removeConteneur(element=null){
@@ -839,7 +807,6 @@ class Character {
             return false;
         };
     }
-
     // Méthode qui met à jour les coordonnées des items dans l'inventaire du joueur
     updateCoordinatesConteneur(){
         let player = this;
@@ -851,7 +818,7 @@ class Character {
 }
 
 // Model prend pour l'instant la valeur weapon uniquement
-// TO DO : extend item à wepaon ?
+// TO DO : extend item à weapon ?
 class Item{
     
     constructor(name,image,line,column,model){
