@@ -12,7 +12,7 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <!-- Material Design Bootstrap -->
   <link href="css/mdb.min.css" rel="stylesheet">
-  <!-- Your custom styles (optional) -->
+  <!-- Custom styles -->
   <link href="css/style.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css" />
   <style type="text/css">
@@ -55,7 +55,7 @@
     <div class="container">
 
       <!-- Brand -->
-      <a class="navbar-brand" href="https://emeric.hochart.info/" target="_blank">
+      <a class="navbar-brand" href="#boardgame">
         <strong>Boardgame</strong>
       </a>
 
@@ -79,25 +79,15 @@
             <a class="nav-link" href="#aboutboardgame">A propos</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://emeric.hochart.info/" target="_blank">Jouer</a>
+            <a class="nav-link" href="#rules">Règles</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://emeric.hochart.info/" target="_blank">Configuration</a>
+            <a class="nav-link" href="#configuration">Configuration</a>
           </li>
         </ul>
 
         <!-- Right -->
-        <ul class="navbar-nav nav-flex-icons">
-          <li class="nav-item">
-            <a href="" class="nav-link" target="_blank">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="" class="nav-link" target="_blank">
-              <i class="fab fa-twitter"></i>
-            </a>
-          </li>
+        <ul class="navbar-nav nav-flex-icons">          
           <li class="nav-item">
             <a href="https://github.com/EmericHochart/boardgame" class="nav-link border border-light rounded"
               target="_blank">
@@ -113,7 +103,7 @@
   <!-- Navbar -->
 
   <!-- Full Page Intro -->
-  <div class="view full-page-intro" style="background-image: url('https://images.unsplash.com/photo-1542403764-19e1bb75cc75?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80'); background-repeat: no-repeat; background-size: cover;">
+  <div id="boardgame" class="view full-page-intro" style="background-image: url('https://images.unsplash.com/photo-1542403764-19e1bb75cc75?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80'); background-repeat: no-repeat; background-size: cover;">
 
     <!-- Mask & flexbox options-->
     <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
@@ -139,9 +129,9 @@
               <strong>Des joueurs évoluent chacun leur tour pour s'affronter. Comme dans Highlander, il ne peut en rester qu'un !.</strong>
             </p>
 
-            <a id="playNow" href="#board" class="btn btn-indigo btn-lg">Jouer tout de suite !
+            <a href="#board"><button id="playNow" class="btn btn-indigo btn-lg play" enabled="true">Jouer tout de suite !
               <i class="fas fa-chess-knight ml-2"></i>
-            </a>
+            </button></a>
 
           </div>
           <!--Grid column-->
@@ -154,33 +144,27 @@
 
               <!--Card content-->
               <div class="card-body">
-
-                <!-- Form -->
-                <form name="">
-                  <!-- Heading -->
-                  <h3 class="dark-grey-text text-center">
-                    <strong>Joueurs :</strong>
-                  </h3>
+ 
+                <!-- Heading -->
+                <h3 class="dark-grey-text text-center">
+                  <strong>Match Rapide</strong>
+                </h3>
+                <hr>
+                <div>               
+                  <strong>3</strong> ... cases pour bouger
                   <hr>
-
-                  <div class="md-form">
-                    <i class="fas fa-user prefix grey-text"></i>
-                    <input type="text" id="formPlayer1" class="form-control">
-                    <label for="formPlayer1">Joueur 1</label>
-                  </div>
-                  <div class="md-form">
-                    <i class="fas fa-user prefix grey-text"></i>
-                    <input type="text" id="formPlayer2" class="form-control">
-                    <label for="formPlayer2">Joueur 2</label>
-                  </div>
-                  <div class="text-center">
-                    <button class="btn btn-indigo">Jouer</button>
-                  
-                    
-                  </div>
-
-                </form>
-                <!-- Form -->
+                </div>
+                <div>
+                  <strong>2</strong> ... joueurs s'affrontent avec les règles de base.
+                  <hr>
+                </div>
+                <div>
+                  <strong>1</strong> ... seul survivra !
+                  <hr>
+                </div>
+                <div class="text-center">               
+                  <strong>PLAY !</strong> 
+                </div>
 
               </div>
 
@@ -222,7 +206,6 @@
           <div id="ui-players" class="col-md-4 mb-4">
             <h3>Start !</h3>
             <hr/>
-            
             <!-- CTA -->
             <button id="attack" class="btn btn-indigo btn-md">Attaquer
               <i class="fas fa-bullseye ml-1"></i>
@@ -231,8 +214,9 @@
               <i class="fas fa-shield-alt ml-1"></i>
             </button>
             <hr/>
-            <!-- Joueurs -->  
-          </div>
+          <!-- CTA -->
+              
+          </div>          
           <!--Interface UI in Game-->
 
         </div>
@@ -304,9 +288,9 @@
           <div class="col-lg-6 col-md-12">
 
             <p class="h5 text-center mb-4">Regardez notre "5 min Quick Start" tutoriel</p>
-            <div class="embed-responsive embed-responsive-16by9">
+            <!--<div class="embed-responsive embed-responsive-16by9">
               <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/cXTThxoywNQ" allowfullscreen></iframe>
-            </div>
+            </div>-->
           </div>
           <!--/Grid column-->
 
@@ -319,7 +303,7 @@
       <hr class="my-5">
 
       <!--Section: Règles de Base-->
-      <section>
+      <section id="rules">
 
         <h2 class="my-5 h3 text-center">Règles de base</h2>
 
@@ -387,7 +371,7 @@
 
           <!--Second column-->
           <div class="col-md-4 flex-center">
-            <img src="https://mdbootstrap.com/img/Others/screens.png" alt="MDB Magazine Template displayed on iPhone" class="z-depth-0 img-fluid">
+            <img src="../boardgame/img/regle.png" alt="Boardgame règles" class="z-depth-0 img-fluid">
           </div>
           <!--/Second column-->
 
@@ -594,6 +578,119 @@
       </section>
       <!--Section: Et bien plus-->
 
+      <!--Section: Configuration-->
+      <section id="configuration">
+
+        <h2 class="my-5 h3 text-center">Configuration</h2>
+        
+        <!-- Form -->
+        <form id="config" name="config">
+          
+          <!-- Grid row -->
+          <div class="row">
+            <!--Card-->
+            <div class="card">
+                <!--Card image-->
+                <div class="view">
+                  <img src="../boardgame/img/configuration_header.png" class="card-img-top" alt="photo">
+                  <a href="#">
+                    <div class="mask rgba-white-slight"></div>
+                  </a>
+                </div>
+                <!--Card image-->
+                <!--Card content-->
+                <div class="card-body">
+                  <div class="row">
+                  <!-- Map Column -->
+                  <div class="col-lg-4 px-2 mb-r">
+                        <!-- Heading -->
+                        <h3 class="dark-grey-text text-center">
+                          <strong>Carte</strong>
+                        </h3>
+                        <hr>
+
+                        <div class="md-form">
+                          <i class="fas fa-grip-lines prefix grey-text"></i>
+                          <label for="configLines">Lignes</label>
+                          <input type="range" class="custom-range" value="10" min="6" max="12" step="1" id="configLines">
+                        </div>
+
+                        <div class="md-form">
+                          <i class="fas fa-grip-lines-vertical prefix grey-text"></i>
+                          <label for="configColumns">Colonnes</label>
+                          <input type="range" class="custom-range" value="10" min="6" max="12" step="1" id="configColumns">
+                        </div>
+
+                        <div class="md-form">
+                          <i class="far fa-square prefix grey-text"></i>
+                          <label for="configSize">Taille</label>
+                          <input type="range" class="custom-range" value="64" min="32" max="64" step="8" id="configSize">
+                        </div>
+                  </div>
+                  <!-- Map Column -->
+                  <!-- World Column -->
+                  <div class="col-lg-4 px-2 mb-r">
+                        <!-- Heading -->
+                        <h3 class="dark-grey-text text-center">
+                          <strong>Monde</strong>
+                        </h3>
+                        <hr>
+                        <div class="md-form">
+                          <i class="fab fa-accessible-icon prefix grey-text"></i>
+                          <label for="configObstacles">Obstacles</label>
+                          <input type="range" class="custom-range" value="10" min="0" max="20" step="1" id="configObstacles">
+                        </div>
+                        <div class="md-form">
+                          <i class="fas fa-shield-alt prefix grey-text"></i>
+                          <label for="configWeapons">Armes</label>
+                          <input type="range" class="custom-range" value="4" min="0" max="8" step="1" id="configWeapons">
+                        </div>
+                        <div class="md-form">
+                          <select class="browser-default custom-select" id="configWorld">
+                            <option value="medieval" selected>Médiéval</option>
+                            <option value="forest">Forestier</option>
+                            <option value="desert">Désertique</option>
+                            <option value="swamp">Marécageux</option>
+                          </select>
+                        </div>
+                  </div>
+                  <!-- World Column -->
+                  <!-- Character Column -->
+                  <div class="col-lg-4 px-2 mb-r">
+                        <!-- Heading -->
+                        <h3 class="dark-grey-text text-center">
+                          <strong>Joueurs</strong>
+                        </h3>
+                        <hr>
+
+                        <div class="md-form">
+                          <i class="fas fa-user-plus prefix grey-text"></i>
+                          <label for="configPlayers">Joueurs</label>
+                          <input type="range" class="custom-range" value="2" min="1" max="4" step="1" id="configPlayers">
+                        </div>
+                        <div class="md-form">
+                          <i class="fas fa-skull prefix grey-text"></i>
+                          <label for="configIA">IA</label>
+                          <input type="range" class="custom-range" value="0" min="0" max="3" step="1" id="configIA" disabled>
+                        </div>
+                  </div>
+                  <!-- Character Column -->
+                  </div>
+                  <div class="text-center">
+                    <a href="#board"></a><input id="playConfig" type="submit" class="btn btn-indigo play" value="Jouer"></input></a>
+                  </div>
+                </div>
+                <!--Card content-->
+            </div>
+            <!--/.Card-->
+          </div>
+          <!-- Grid row -->
+        </form>
+        <!-- Form -->            
+        
+      </section>
+      <!--Section: Configuration-->
+
     </div>
   </main>
   <!--Main layout-->
@@ -616,37 +713,22 @@
 
     <!-- Social icons -->
     <div class="pb-4">
-      <a href="https://www.facebook.com/" target="_blank">
+      <a href="https://www.facebook.com/HochartEmeric" target="_blank">
         <i class="fab fa-facebook-f mr-3"></i>
       </a>
 
-      <a href="https://twitter.com/" target="_blank">
+      <a href="https://twitter.com/EmericHochart" target="_blank">
         <i class="fab fa-twitter mr-3"></i>
       </a>
 
-      <a href="https://www.youtube.com/" target="_blank">
+      <a href="https://www.youtube.com/user/Pr3tr3/" target="_blank">
         <i class="fab fa-youtube mr-3"></i>
       </a>
-
-      <a href="https://plus.google.com/" target="_blank">
-        <i class="fab fa-google-plus-g mr-3"></i>
-      </a>
-
-      <a href="https://dribbble.com/" target="_blank">
-        <i class="fab fa-dribbble mr-3"></i>
-      </a>
-
-      <a href="https://pinterest.com/" target="_blank">
-        <i class="fab fa-pinterest mr-3"></i>
-      </a>
-
+            
       <a href="https://github.com/EmericHochart/boardgame" target="_blank">
         <i class="fab fa-github mr-3"></i>
       </a>
-
-      <a href="http://codepen.io/" target="_blank">
-        <i class="fab fa-codepen mr-3"></i>
-      </a>
+      
     </div>
     <!-- Social icons -->
 
@@ -674,15 +756,12 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.1/js/mdb.min.js"></script>
   
   <!-- Boardgame JS -->
-  <script src="js/fonctions.js"></script>
-  <script src="js/class.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/case.js"></script>
+  <script src="js/character.js"></script>
+  <script src="js/item.js"></script>
   <script src="js/world.js"></script>
-
-  <!-- Initializations 
-  <script type="text/javascript">
-    // Animations initialization
-    new WOW().init();
-  </script>-->
+  
 </body>
 
 </html>
