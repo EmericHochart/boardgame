@@ -1,48 +1,19 @@
-let weapons=new Array();
-let characters=new Array();
-
 $(function(){
 
     // Tooltips
     $('[data-toggle="tooltip"]').tooltip()
 
     // Animations initialization
-    // new WOW().init();
-
-    // Json : weapons 
-    $.ajax({
-        type: 'GET',
-        url: 'json/weapon.json',
-        timeout: 2000,
-        success: function(data) {   
-                $.each(data,function(index,value){
-                    weapons.push(new Item(value.name,value.image,null,null,"weapon",value.damage));
-                });
-            },
-        error: function() {
-            alert('La requête n\'a pas abouti'); }
-    });
-
-    // Json : characters
-    $.ajax({
-        type: 'GET',
-        url: 'json/character.json',
-        timeout: 2000,
-        success: function(data) {   
-                $.each(data,function(index,value){
-                    characters.push(new Character(value.name,value.health,value.image,null,null));
-                });
-            },
-        error: function() {
-            alert('La requête n\'a pas abouti'); }
-    });
+    // new WOW().init();    
 
     // Play Now 
-    $('#playNow').on('click', function(){
+    $('#playNow').on('click', function(e){
         $('.play').attr('disabled','true');
+        $('#loadGame').css('display','none');
         var nowMap = null;
-        var nowMap = new Map(10,10,64,"medieval");
+        var nowMap = new Map(10,10,64,"medieval");        
         nowMap.initGame(10,4,2);
+        e.preventDefault();
     });
 
     // Play by Setup
@@ -56,11 +27,61 @@ $(function(){
         let c_players = Number($('#configPlayers').val());
         //let c_ia = Number($('#configIA').val());
         $('.play').attr('disabled','true');
+        $('#loadGame').css('display','none');
         var configMap = null;
-        var configMap = new Map(c_lines,c_columns,c_size,c_world);
+        configMap = new Map(c_lines,c_columns,c_size,c_world);
         $('html,body').animate({scrollTop: $("#board").offset().top},'slow');
         configMap.initGame(c_obstacles,c_weapons,c_players);   
         e.preventDefault();
+    });
+
+    // Load Game
+    $('#loadGame').on('click', function(e){        
+        
+        $('.play').attr('disabled','true');
+        $('#loadGame').css('display','none');        
+        
+        var mapLoaded = JSON.parse(localStorage.getItem("boardgame"));
+        // Problème avec url à corriger
+        // "../boardgame/assets/images/"+world+"/"
+        let world = mapLoaded.world.substr(27,mapLoaded.world.length-1);
+        
+        var newMap = new Map(mapLoaded.maxLine,mapLoaded.maxColumn,mapLoaded.size,world);
+
+        for (let i = 0 ; i < newMap.maxLine ; i++) {
+                    newMap.board[i] = new Array();
+                    for (let j = 0 ; j < newMap.maxColumn ; j++) {
+                        newMap.board[i][j] = new Case(i,j,0,"empty.png");
+                        newMap.board[i][j].ground = mapLoaded.board[i][j].ground;
+                        newMap.board[i][j].image = mapLoaded.board[i][j].image;
+                        
+                            $.each(mapLoaded.board[i][j].conteneur,function(index,value){
+                                if (value.health==undefined){                                   
+                                    let item = new Item(value.name,value.image,value.line,value.column,value.model,value.damage);  
+                                    newMap.board[i][j].setConteneur(item);
+                                }; 
+                            });
+                    };
+        };
+        for (let i = 0 ; i < mapLoaded.characters.length ; i++) {
+            newMap.characters[i] = new Character(mapLoaded.characters[i].name,mapLoaded.characters[i].health,mapLoaded.characters[i].image,mapLoaded.characters[i].line,mapLoaded.characters[i].column);
+            
+            $.each(mapLoaded.characters[i].conteneur,function(index,value){
+                let item = new Item(value.name,value.image,value.line,value.column,value.model,value.damage);                  
+                newMap.characters[i].setConteneur(item);                
+            });
+
+            newMap.characters[i].shield = mapLoaded.characters[i].shield;
+            newMap.board[mapLoaded.characters[i].line][mapLoaded.characters[i].column].setConteneur(newMap.characters[i]);
+            newMap.displayUI(newMap.characters[i]);
+        };
+                     
+        newMap.current = mapLoaded.current;
+        newMap.readyWeapons = true;
+        newMap.readyCharacters = true;        
+        newMap.isReady();
+        e.preventDefault();
+        
     });
     
 

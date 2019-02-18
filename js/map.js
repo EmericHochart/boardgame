@@ -8,6 +8,8 @@ class Map {
         this.board = new Array();
         this.characters = new Array();
         this.current = 0;
+        this.readyWeapons = false;
+        this.readyCharacters = false;
     }
 
     initGame(obstacles,weapon,player){
@@ -15,8 +17,15 @@ class Map {
         this.initObstacle(obstacles);
         this.initWeapon(weapon);
         this.initPlayer(player);
-        this.displayMap();        
-        this.start();
+        this.isReady();
+    }
+
+    isReady(){
+        if (this.readyWeapons == true && this.readyCharacters == true) {
+            this.displayMap();
+            this.saveGame();            
+            this.start();
+        };
     }
 
     initMap(){
@@ -30,7 +39,7 @@ class Map {
     }
 
     initObstacle(percentage=10){
-        percentage = (percentage>15)?15:percentage;
+        percentage = (percentage>25)?25:percentage;
         for (let k = 0 ; k < (percentage/100*this.maxLine*this.maxColumn) ; k++) {
             let [x,y] = this.randomCoordinates();
             (!this.board[x][y].isEmpty())?k--:this.board[x][y].isObstacle(true);
@@ -38,85 +47,137 @@ class Map {
     }
 
     initWeapon(amount=4){
-        //Limit to length of weapons
-        if (amount>weapons.length){
-            amount = weapons.length;
-        };
-        let map=this;
-        // Array of active Weapons
-        let activeWeapons = new Array(amount);        
-        let tableIndexWeapon = new Array();
-        for ( let i = 0 ; i < weapons.length ; i++) {
-            tableIndexWeapon[i]=i;
-        };
-        let indexWeapon = 0;
-        for (let j = 0; j < amount; j++){
-            indexWeapon = Math.floor(Math.random()*tableIndexWeapon.length);
-            activeWeapons[j]=weapons[tableIndexWeapon[indexWeapon]];
-            tableIndexWeapon.splice(indexWeapon,1);
-        };
-        let [x,y] = new Array();
-        let square;
-        $.each(activeWeapons, function(index,value){
-            // We make sure that there are no obstacles and no items or characters on the box
-            do {
-                [x,y] = map.randomCoordinates();
-                square = map.board[x][y];
-            }
-            while (square.isObstacle() || square.conteneur!==null);            
-            // We place the weapon in the box's container
-            square.setConteneur(value);
-        });
+        let map=this;        
+        // Json : weapons 
+        $.ajax({
+            type: 'GET',
+            url: 'json/weapon.json',
+            timeout: 2000,
+            success: function(data) {
+                    // Weapons recovery
+                    let weapons=new Array();   
+                    $.each(data,function(index,value){
+                        weapons.push(new Item(value.name,value.image,null,null,"weapon",value.damage));
+                    });
+                    //Limit to length of weapons
+                    if (amount>weapons.length) {
+                        amount = weapons.length;
+                    };
+                    // Array of active Weapons
+                    let activeWeapons = new Array(amount);
+                    // We create a list of random unique weapons
+                    let tableIndexWeapon = new Array();
+                    for ( let i = 0 ; i < weapons.length ; i++) {
+                        tableIndexWeapon[i]=i;
+                    };
+                    let indexWeapon = 0;
+                    for (let j = 0; j < amount; j++){
+                        indexWeapon = Math.floor(Math.random()*tableIndexWeapon.length);
+                        activeWeapons[j]=weapons[tableIndexWeapon[indexWeapon]];
+                        tableIndexWeapon.splice(indexWeapon,1);
+                    };
+                    // For each weapon, we define random coordinates
+                    let [x,y] = new Array();
+                    let square;
+                    $.each(activeWeapons, function(index,value){
+                        // We make sure that there are no obstacles and no items or characters on the box
+                        do {
+                            [x,y] = map.randomCoordinates();
+                            square = map.board[x][y];
+                        }
+                        while (square.isObstacle() || square.conteneur!==null);            
+                        // We place the weapon in the box's container
+                        square.setConteneur(value);
+                    });
+                    // The request is a success, we indicate that we are ready
+                    map.readyWeapons = true;
+                    map.isReady();
+                },
+            error: function() {
+                alert('La requête n\'a pas abouti'); }
+        });    
     }
     
     initPlayer(player=2){
-        // Limit to 4 characters
-        if (player>4){
-            player = 4;
-        };
-        let map=this;
-        // We initialize the character table with different random avatars
-        let tableIndexAvatar = new Array();
-        for ( let i = 0 ; i < characters.length ; i++) {
-            tableIndexAvatar[i]=i;
-        };
-        let indexAvatar = 0;
-        for (let j = 0; j < player; j++) {
-            indexAvatar = Math.floor(Math.random()*tableIndexAvatar.length);
-            map.characters[j]=characters[tableIndexAvatar[indexAvatar]];
-            tableIndexAvatar.splice(indexAvatar,1);
-        };
-        // Array of active Characters
-        let activeCharacters = map.characters;
-        // Array with coordinates of Characters
-        let posPlayer = new Array();
-        // Default Weapon 
-        let weaponBasic = new Item("Epée en bois","woodSword.png",null,null,"weapon",10);
-            
-        $.each(activeCharacters, function(index,value){
-            let [x,y]=new Array();
-            let square;
-            let alone = true;
-            // We make sure that there are no obstacles and objects on the box and no characters around
-            do {
-                [x,y] = map.randomCoordinates();
-                square = map.board[x][y];
-                // We check that there is no character around
-                $.each(posPlayer,function(index,value){
-                    if ((Math.abs(x-value[0])<=1)&&(Math.abs(y-value[1])<=1)) {
-                        alone = false;
+        let map=this;        
+        // Json : characters
+        $.ajax({
+            type: 'GET',
+            url: 'json/character.json',
+            timeout: 2000,
+            success: function(data) {
+                    // Characters recovery
+                    let characters=new Array();   
+                    $.each(data,function(index,value){
+                        characters.push(new Character(value.name,value.health,value.image,null,null));
+                    });
+                    // Limit to 4 characters
+                    if (player>4){
+                        player = 4;
                     };
-                });
-            }
-            while ( square.isObstacle()||square.conteneur!=null||alone==false );
-            // We place the character in the box's container
-            square.setConteneur(value);
-            // We place the basic weapon in the container of the character
-            value.setConteneur(weaponBasic);
-            // We add the coordinates of the character in the position table
-            posPlayer.push([x,y]);
-            // We display the UI of the character
-            map.displayUI(value);   
+                    // Array of active Characters
+                    let activeCharacters = map.characters;
+                    // Array with coordinates of Characters
+                    let posPlayer = new Array();
+                    // Default Weapon 
+                    let weaponBasic = new Item("Epée en bois","woodSword.png",null,null,"weapon",10);   
+                    // We initialize the character table with different random avatars
+                    let tableIndexAvatar = new Array();
+                    for ( let i = 0 ; i < characters.length ; i++) {
+                        tableIndexAvatar[i]=i;
+                    };
+                    let indexAvatar = 0;
+                    for (let j = 0; j < player; j++) {
+                        indexAvatar = Math.floor(Math.random()*tableIndexAvatar.length);
+                        map.characters[j]=characters[tableIndexAvatar[indexAvatar]];
+                        tableIndexAvatar.splice(indexAvatar,1);
+                    };
+                    $.each(activeCharacters, function(index,value){
+                        // For each character, we define random coordinates
+                        let [x,y]=new Array();
+                        let square;
+                        let alone = true;            
+                        // We make sure that there are no obstacles and objects on the box and no characters around
+                        let tryPlayer=0;
+                        let errorPlayer=false;
+                        do {
+                            [x,y] = map.randomCoordinates();
+                            square = map.board[x][y];
+                            // We check that there is no character around                
+                            $.each(posPlayer,function(index,value){                    
+                                if ((Math.abs(x-value[0])<=1)&&(Math.abs(y-value[1])<=1)) {
+                                    alone = false;
+                                    tryPlayer++;
+                                };                    
+                            });
+                            // Above 600 tests, we consider the positioning is problematic
+                            if (tryPlayer>600) {                    
+                                errorPlayer=true;                    
+                                break;
+                            };
+                        }
+                        while ( square.isObstacle()||square.conteneur!=null||alone==false );
+                        // If there is too much positioning failure, make sure to leave the loop
+                        if (errorPlayer==true){
+                            console.log("Echec positionnement player");
+                            window.location.reload(true);
+                            return false;
+                        };
+                        // We place the character in the box's container
+                        square.setConteneur(value);
+                        // We place the basic weapon in the container of the character
+                        value.setConteneur(weaponBasic);
+                        // We add the coordinates of the character in the position table
+                        posPlayer.push([x,y]);
+                        // We display the UI of the character
+                        map.displayUI(value);                        
+                    });
+                    // The request is a success, we indicate that we are ready
+                    map.readyCharacters = true;
+                    map.isReady();
+                },
+            error: function() {
+                alert('La requête n\'a pas abouti'); }
         });
     }
 
@@ -158,7 +219,6 @@ class Map {
         let map = this;
         let charactersTemp = this.characters;
         $(function(){
-
             $('.ui-draggable').draggable( "destroy" );
             map.removeDisplayMove();
             $( '.ui-droppable' ).droppable( "destroy" );
@@ -213,9 +273,15 @@ class Map {
     start(){
         // We randomly select a character to start the game
         this.current = Math.floor(Math.random()*this.characters.length);
-        this.characters[this.current].deplace(this);
+        try {
+            this.characters[this.current].deplace(this);
+        }
+        catch(err) {
+            console.log(err);
+        }
+        
     }
-    
+
     endGame(){
         $('#ui-players').html('<h3>Rejouez</h3><hr/><button id="gameAgain" class="btn btn-indigo btn-md">Recommencer une partie</button>');
         $('#gameAgain').on('click',function(){
@@ -233,4 +299,13 @@ class Map {
         };
     }
 
+    saveGame(){
+            let map = this;        
+            // Save the game
+            $('#saveGame').on('click', function(){
+                let mapSaved = JSON.stringify(map);                               
+                localStorage.setItem("boardgame",mapSaved);                
+            });
+    }
+        
 }

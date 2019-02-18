@@ -141,24 +141,25 @@ class Character {
         
         // We choose to check the 4 boxes around rather than looking at each player       
         let nextTurn = false;
-        // To the right
-        if (this.column+1<=map.maxColumn-1) {
-            map.board[this.line][this.column+1].hasPlayer()? map.fight(this,map.board[this.line][this.column+1].getCharacter()) : nextTurn=true;          
-        };
-        // To the Left
-        if (this.column-1>=0) {
-            map.board[this.line][this.column-1].hasPlayer()? map.fight(this,map.board[this.line][this.column-1].getCharacter()) : nextTurn=true;;
-        };
-        // Below
-        if (this.line+1<=map.maxLine-1) {
-            map.board[this.line+1][this.column].hasPlayer()? map.fight(this,map.board[this.line+1][this.column].getCharacter()) : nextTurn=true;;
-        };
-        // Up
-        if (this.line-1>=0) {
-            map.board[this.line-1][this.column].hasPlayer()? map.fight(this,map.board[this.line-1][this.column].getCharacter()) : nextTurn=true;;
-        };
-        // We check that it remains a character alive
-        if (nextTurn == true) {
+        
+        if ( (this.column+1<=map.maxColumn-1) && (map.board[this.line][this.column+1].hasPlayer()) ){
+                // To the right
+                map.fight(this,map.board[this.line][this.column+1].getCharacter());                      
+        }
+        else if ( (this.column-1>=0) && (map.board[this.line][this.column-1].hasPlayer()) ){
+                // To the Left
+                map.fight(this,map.board[this.line][this.column-1].getCharacter());
+        }
+        else if ( (this.line+1<=map.maxLine-1) && (map.board[this.line+1][this.column].hasPlayer()) ){
+                // Below
+                map.fight(this,map.board[this.line+1][this.column].getCharacter());
+        }        
+        else if ( (this.line-1>=0) && (map.board[this.line-1][this.column].hasPlayer()) ){
+            // Up
+            map.fight(this,map.board[this.line-1][this.column].getCharacter());
+        }
+        else {
+            // We check that it remains a character alive
             if (map.characters.length>1) {
             map.updateCurrent();    
             map.characters[map.current].deplace(map);

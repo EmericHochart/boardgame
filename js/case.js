@@ -52,7 +52,7 @@ class Case {
             // If the container contains 1 character so we only display him otherwise if we have one item we display the item
             let inventaire = this.conteneur;
             $.each(inventaire,function(index,value) {
-                // Character Display
+                // Character Display                
                 if(value instanceof Character) {
                     let url = "url('"+map.world+"characters/"+value.image+"')";
                     if ($('#'+value.name).length == 0) {
@@ -123,7 +123,6 @@ class Case {
         return character;
     }
 
-    // TODO : attention ici le getter met une arme aléatoire
     hasWeapon(model=null){
         let conteneur = this.conteneur;
         if(model===null) {
@@ -141,11 +140,10 @@ class Case {
             }
         }
         else {
-            console.log("Not currently managing")
+            console.log("Not currently managing");
         }
     }
-
-    // TODO : REVOIR la méthode , Setter ?
+    
     hasPlayer(player=null){
         let conteneur = this.conteneur;
         if(player===null) {
@@ -163,18 +161,10 @@ class Case {
             }
         }
         else {
-            // On indique qu'on veut que la case ait un joueur
-            // TO DO
+            console.log("Not currently managing");
         }
 
     }
-    
-    /*
-    randomWeapon(){
-        let aleatoire = Math.floor(Math.random()*(weapons.length));
-        return weapons[aleatoire];
-    }
-    */
 
     isEmpty(ground=null){
         if(ground===null) {
@@ -196,25 +186,26 @@ class Case {
         };
     }
 
-    // TODO Simplifier à l'aide d'une fonction le code redondant
+    changeWeapon(map,player){
+        let weaponConteneur =this.getWeapon();
+        this.removeConteneur(weaponConteneur);
+        let weaponCharacter = player.getWeapon();
+        player.removeConteneur(weaponCharacter);
+        this.setConteneur(weaponCharacter);
+        player.setConteneur(weaponConteneur);
+        $('#ConteneurL'+this.line+'C'+this.column).css('background-image',"url('"+map.world+"weapons/"+weaponCharacter.image+"')");
+        $('#weapon-'+player.name).attr('src',map.world+"weapons/"+weaponConteneur.image);
+        $('#weapon-'+player.name).attr('title',weaponConteneur.name);
+    }
+    
     weaponOnPath(map,player,originLine,originColumn){
         let signLine = Math.sign(this.line-originLine);
         let signColumn = Math.sign(this.column-originColumn);
         switch(signLine) {
             case 1 :
                 for (let i = originLine+1 ; i <= this.line ; i++){
-                    if (map.board[i][originColumn].hasWeapon()==true) {
-                        let weaponConteneur = map.board[i][originColumn].getWeapon();
-                        map.board[i][originColumn].removeConteneur(weaponConteneur);
-                        let weaponCharacter = player.getWeapon();
-                        player.removeConteneur(weaponCharacter);
-                        map.board[i][originColumn].setConteneur(weaponCharacter);
-                        player.setConteneur(weaponConteneur);
-                        $('#ConteneurL'+i+'C'+originColumn).css('background-image',"url('"+map.world+"weapons/"+weaponCharacter.image+"')");
-                        $('#weapon-'+player.name).attr('src',map.world+"weapons/"+weaponConteneur.image);
-                        $('#weapon-'+player.name).attr('title',weaponConteneur.name);
-
-                        /// AFFICHAGE DE L'ARME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    if (map.board[i][originColumn].hasWeapon()) {
+                        map.board[i][originColumn].changeWeapon(map,player);
                     }
                 };
                 break;
@@ -222,15 +213,7 @@ class Case {
                 
                 for (let i = originLine-1 ; i >= this.line ; i--){
                     if (map.board[i][originColumn].hasWeapon()) {
-                        let weaponConteneur = map.board[i][originColumn].getWeapon();
-                        map.board[i][originColumn].removeConteneur(weaponConteneur);
-                        let weaponCharacter = player.getWeapon();
-                        player.removeConteneur(weaponCharacter);
-                        map.board[i][originColumn].setConteneur(weaponCharacter);
-                        player.setConteneur(weaponConteneur);
-                        $('#ConteneurL'+i+'C'+originColumn).css('background-image',"url('"+map.world+"weapons/"+weaponCharacter.image+"')");
-                        $('#weapon-'+player.name).attr('src',map.world+"weapons/"+weaponConteneur.image);
-                        $('#weapon-'+player.name).attr('title',weaponConteneur.name);
+                        map.board[i][originColumn].changeWeapon(map,player);
                     }
                 }
                 break;
@@ -240,30 +223,14 @@ class Case {
                     case 1:
                         for (let j = originColumn+1 ; j <= this.column ; j++){
                             if (map.board[originLine][j].hasWeapon()) {
-                                let weaponConteneur = map.board[originLine][j].getWeapon();
-                                map.board[originLine][j].removeConteneur(weaponConteneur);
-                                let weaponCharacter = player.getWeapon();
-                                player.removeConteneur(weaponCharacter);
-                                map.board[originLine][j].setConteneur(weaponCharacter);
-                                player.setConteneur(weaponConteneur);
-                                $('#ConteneurL'+originLine+'C'+j).css('background-image',"url('"+map.world+"weapons/"+weaponCharacter.image+"')");
-                                $('#weapon-'+player.name).attr('src',map.world+"weapons/"+weaponConteneur.image);
-                                $('#weapon-'+player.name).attr('title',weaponConteneur.name);
+                                map.board[originLine][j].changeWeapon(map,player);
                             }
                         }
                     break;
                     case -1:
                         for (let j = originColumn-1 ; j >= this.column ; j--){
                             if (map.board[originLine][j].hasWeapon()) {
-                                let weaponConteneur = map.board[originLine][j].getWeapon();
-                                map.board[originLine][j].removeConteneur(weaponConteneur);
-                                let weaponCharacter = player.getWeapon();
-                                player.removeConteneur(weaponCharacter);
-                                map.board[originLine][j].setConteneur(weaponCharacter);
-                                player.setConteneur(weaponConteneur);
-                                $('#ConteneurL'+originLine+'C'+j).css('background-image',"url('"+map.world+"weapons/"+weaponCharacter.image+"')");
-                                $('#weapon-'+player.name).attr('src',map.world+"weapons/"+weaponConteneur.image);
-                                $('#weapon-'+player.name).attr('title',weaponConteneur.name);
+                                map.board[originLine][j].changeWeapon(map,player);
                             }
                         }
                     break;
