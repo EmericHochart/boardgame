@@ -136,7 +136,6 @@ class Character {
         this.characterAround(map);       
     }
 
-    // TODO : cas où plusieurs joueurs sont autour PROBLEME !!!!!!!!!!!!!!!!
     characterAround(map){
         
         // We choose to check the 4 boxes around rather than looking at each player       

@@ -42,10 +42,8 @@ $(function(){
         $('#loadGame').css('display','none');        
         
         var mapLoaded = JSON.parse(localStorage.getItem("boardgame"));
-        // Problème avec url à corriger
-        // "../boardgame/assets/images/"+world+"/"
-        let world = mapLoaded.world.substr(27,mapLoaded.world.length-1);
         
+        let world = mapLoaded.world.substr(27,mapLoaded.world.length-1);        
         var newMap = new Map(mapLoaded.maxLine,mapLoaded.maxColumn,mapLoaded.size,world);
 
         for (let i = 0 ; i < newMap.maxLine ; i++) {
@@ -80,9 +78,7 @@ $(function(){
         newMap.readyWeapons = true;
         newMap.readyCharacters = true;        
         newMap.isReady();
-        e.preventDefault();
-        
-    });
-    
+        e.preventDefault();        
+    });    
 
 });

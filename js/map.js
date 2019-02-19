@@ -39,7 +39,7 @@ class Map {
     }
 
     initObstacle(percentage=10){
-        percentage = (percentage>25)?25:percentage;
+        percentage = (percentage>45)?45:percentage;
         for (let k = 0 ; k < (percentage/100*this.maxLine*this.maxColumn) ; k++) {
             let [x,y] = this.randomCoordinates();
             (!this.board[x][y].isEmpty())?k--:this.board[x][y].isObstacle(true);
@@ -150,16 +150,23 @@ class Map {
                                     tryPlayer++;
                                 };                    
                             });
-                            // Above 600 tests, we consider the positioning is problematic
-                            if (tryPlayer>600) {                    
+                            // Above 9547720 tests, we consider the positioning is problematic (why not ?)
+                            if (tryPlayer>9547720) {                    
                                 errorPlayer=true;                    
                                 break;
                             };
                         }
                         while ( square.isObstacle()||square.conteneur!=null||alone==false );
+                        // We check that there is a path from the previous player to the active player
+                        if (index>0 && errorPlayer == false){
+                            let xa=activeCharacters[index-1].line;                                
+                            let ya=activeCharacters[index-1].column;                                
+                            var path = new Astarpathfinding (map, map.board[xa][ya], map.board[x][y]);                            
+                            errorPlayer = path.app();      
+                        };
                         // If there is too much positioning failure, make sure to leave the loop
                         if (errorPlayer==true){
-                            console.log("Echec positionnement player");
+                            alert("Echec positionnement Character");
                             window.location.reload(true);
                             return false;
                         };
