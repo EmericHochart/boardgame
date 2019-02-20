@@ -9,6 +9,7 @@ Vous avez jusqu'ici développé des petites applications JavaScript. Il faut mai
 
 Ce projet consistera à créer un jeu en ligne en JavaScript dans lequel 2 joueurs évoluent chacun leur tour pour s'affronter. Comme dans Highlander, il ne peut en rester qu'un !
 
+
 ![Aperçu du jeu navigateur au tour par tour](https://sdz-upload.s3.amazonaws.com/prod/upload/apercu15.png)
 
 ### Etape 1 : génération de la carte
@@ -57,9 +58,30 @@ Les versions utilisées dans ce projet seront décrites dans cette section :
 
 * Javascript
 * [jQuery 3.3.1](https://jquery.com/)
-* CSS
-* HTML
-* Bootstrap
+* [jQuery UI 1.12.1](https://jqueryui.com/)
+* JSON
+* CSS 3
+* HTML 5
+* [Material Design for Bootstrap](https://mdbootstrap.com/)
+
+----
+## Documentation
+
+### Quick Game 
+
+* [Tutoriel Vidéo - 5 min Quick Start]()
+
+### Custom Game
+
+La section configuration vous permet de modifier certains paramètres du jeu.
+
+* le nombre de lignes du plateau [5 à 12]
+* le nombre de colonnes du plateau [5 à 12]
+* la taille des cases [32 à 64]
+* le pourcentage d'obstacles [0 à 45]
+* le nombre d'armes [0 à 10]
+* l'environnement du jeu [Médiéval, Forestier, Désertique, Marécageux]
+* le nombre de joueurs [2 à 4]
 
 ----
 ## Ressources
@@ -77,8 +99,27 @@ Les versions utilisées dans ce projet seront décrites dans cette section :
 
 ### Images
 
-* 
+* [Free Assets For Everyone by gameart2d.com](https://www.gameart2d.com/freebies.html)
+* [Photo by Ricardo Cruz on Unsplash](https://unsplash.com/photos/DCqvWkXF74Q)
+* [Photo by Denise Jans on Unsplash](https://unsplash.com/photos/4UZBd5Zw56U)
 
 ### Sons et musiques
 
-* 
+* Pas de sons ni musiques actuellement
+
+----
+## TODO
+
+* Code
+    * Documentation détaillée
+    * Optimisation
+* Site
+    * Responsive Design (Amélioration du site sur les autres supports tablette et mobile)
+    * Ajouter des animations
+    * Ajouter un environnement sonore
+    * Créer un background éditorial (histoire des personnages, phrases durant le combat, etc...)
+* Fonctionnalités
+    * Intelligence Artificielle à implémenter
+    * Rendre dynamique le formulaire de configuration en fonction de l'environnement, du Json ou du nombre de joueurs...
+    * Permettre plusieurs sauvegardes
+    * Système d'inventaire
