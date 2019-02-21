@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Dague",
+        "image" : "dagger3.png",
+        "line": 0,
+        "column": 0,
+        "damage": 15
+    },
+    {
+        "name": "Dague de Glace",
+        "image" : "dagger4.png",
+        "line": 0,
+        "column": 0,
+        "damage": 40
+    },
+    {
+        "name": "Dague du Joyau",
+        "image" : "dagger5.png",
+        "line": 0,
+        "column": 0,
+        "damage": 20
+    },
+    {
+        "name": "Dague de l'Infini",
+        "image" : "dagger6.png",
+        "line": 0,
+        "column": 0,
+        "damage": 25
+    },
+    {
+        "name": "Dague de la Lumière",
+        "image" : "dagger7.png",
+        "line": 0,
+        "column": 0,
+        "damage": 35
+    },
+    {
+        "name": "Dague de l'herbe",
+        "image" : "dagger8.png",
+        "line": 0,
+        "column": 0,
+        "damage": 20
+    },
+    {
+        "name": "Kunai",
+        "image" : "dagger9.png",
+        "line": 0,
+        "column": 0,
+        "damage": 20
+    },
+    {
+        "name": "Kunai Empoisonnée",
+        "image" : "dagger10.png",
+        "line": 0,
+        "column": 0,
+        "damage": 30
+    },
+    {
+        "name": "Dague du Dragon",
+        "image" : "dagger11.png",
+        "line": 0,
+        "column": 0,
+        "damage": 50
+    },
+    {
+        "name": "Dague de Feu",
+        "image" : "dagger12.png",
+        "line": 0,
+        "column": 0,
+        "damage": 45
+    }
+]

@@ -1,0 +1,37 @@
+[
+    {
+        "name": "Ghosteye",
+        "health": 100,
+        "image": "ninja.png"      
+    },
+    {
+        "name": "Ironstreak",
+        "health": 100,
+        "image": "samurai.png"      
+    },
+    {
+        "name": "Redshade",
+        "health": 100,
+        "image": "samurai_heavy.png"      
+    },
+    {
+        "name": "Kilrok",
+        "health": 100,
+        "image": "orc1.png"      
+    },
+    {
+        "name": "Krimgol",
+        "health": 100,
+        "image": "orc2.png"      
+    },
+    {
+        "name": "Baagrok",
+        "health": 100,
+        "image": "orc3.png"      
+    },    
+    {
+        "name": "Hilda",
+        "health": 100,
+        "image": "woman_knight2.png"      
+    }
+]

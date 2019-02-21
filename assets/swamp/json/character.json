@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Brad",
+        "health": 100,
+        "image": "knight.png"      
+    },
+    {
+        "name": "Igor",
+        "health": 100,
+        "image": "mage.png"      
+    },
+    {
+        "name": "Clint",
+        "health": 100,
+        "image": "archer.png"      
+    },
+    {
+        "name": "Tommy",
+        "health": 100,
+        "image": "knight_cross.png"      
+    },
+    {
+        "name": "Sven",
+        "health": 100,
+        "image": "viking.png"      
+    },
+    {
+        "name": "Olaf",
+        "health": 100,
+        "image": "viking_axe.png"      
+    },
+    {
+        "name": "Grimson",
+        "health": 100,
+        "image": "viking_shield.png"      
+    },
+    {
+        "name": "Gregor",
+        "health": 100,
+        "image": "knight_bronze.png"      
+    },
+    {
+        "name": "Boromir",
+        "health": 100,
+        "image": "knight_silver.png"      
+    },
+    {
+        "name": "Uther",
+        "health": 100,
+        "image": "knight_gold.png"      
+    },
+    {
+        "name": "Bella",
+        "health": 100,
+        "image": "woman_knight1.png"      
+    },
+    {
+        "name": "Hilda",
+        "health": 100,
+        "image": "woman_knight2.png"      
+    },
+    {
+        "name": "Greta",
+        "health": 100,
+        "image": "woman_archer.png"      
+    }
+]

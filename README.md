@@ -83,6 +83,12 @@ La section configuration vous permet de modifier certains paramètres du jeu.
 * l'environnement du jeu [Médiéval, Forestier, Désertique, Marécageux]
 * le nombre de joueurs [2 à 4]
 
+### Créer son environnement personnalisé
+
+Il est possible d'ajouter vos propres mondes à Boardgame.
+Vous pouvez ainsi créer un environnement avec vos propres armes et personnages, ainsi qu'un terrain de jeu personnalisé.
+Pour cela ,suivez ce [Guide - Pas à Pas pour créer son monde](). 
+
 ----
 ## Ressources
 
@@ -95,13 +101,25 @@ La section configuration vous permet de modifier certains paramètres du jeu.
 
 ### Vidéos
 
-* 
+* ["5 min Quick Start" tutoriel]()
 
 ### Images
 
 * [Free Assets For Everyone by gameart2d.com](https://www.gameart2d.com/freebies.html)
 * [Photo by Ricardo Cruz on Unsplash](https://unsplash.com/photos/DCqvWkXF74Q)
 * [Photo by Denise Jans on Unsplash](https://unsplash.com/photos/4UZBd5Zw56U)
+* [Tiles](https://inscope.itch.io/)
+* [Fantasy Icon Pack by Ravenmore](https://ravenmore.itch.io/fantasy-icon-pack)
+* [Free 2D Knight Sprite Sheets](https://free-game-assets.itch.io/free-2d-knight-sprite-sheets)
+* [Fantasy Heroes: Character Sprite Sheet](https://ragewortt.itch.io/fantasy-heroes-character-sprites)
+* [Fantasy Heroes: Samurai Sprite Sheet](https://ragewortt.itch.io/fantasy-heroes-samurai-sprite-sheet)
+* [Free 2D Woman Warrior Sprite Sheets](https://free-game-assets.itch.io/free-2d-woman-warrior-sprite-sheets)
+* [Fantasy Heroes: Vikings Sprite Sheet](https://ragewortt.itch.io/fantasy-heroes-vikings-sprite-sheet)
+* [Treasure chest](https://pngtree.com/freepng/treasure-chest_3450007.html)
+* [Fist Free Vector and PNG](https://pngtree.com/freepng/fist_669076.html)
+* [Free Game Icons Daggers](https://free-game-assets.itch.io/free-game-icons-daggers)
+* [Cartoon Texture Pack](https://slurpcanon.itch.io/cartoon-texture-pack)
+* [Free 2D Orcs Sprite Sheets](https://free-game-assets.itch.io/free-2d-orcs-sprite-sheets)
 
 ### Sons et musiques
 
@@ -122,4 +140,4 @@ La section configuration vous permet de modifier certains paramètres du jeu.
     * Intelligence Artificielle à implémenter
     * Rendre dynamique le formulaire de configuration en fonction de l'environnement, du Json ou du nombre de joueurs...
     * Permettre plusieurs sauvegardes
-    * Système d'inventaire
+    * Système d'inventaire et d'autres items

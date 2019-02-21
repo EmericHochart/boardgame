@@ -25,6 +25,10 @@
 }
 #ui-players {
     padding-left: 55px;
+    display: none;
+}
+#ui-players>h3 {
+    font-size: 1.2rem;
 }
 .progress-bar {
     display: -ms-flexbox;

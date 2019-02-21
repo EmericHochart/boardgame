@@ -1,0 +1,100 @@
+[
+    {
+        "name": "Dague",
+        "image" : "dagger.png",
+        "line": 0,
+        "column": 0,
+        "damage": 15
+    },
+    {
+        "name": "Dague de Lumière",
+        "image" : "dagger2.png",
+        "line": 0,
+        "column": 0,
+        "damage": 25
+    },
+    {
+        "name": "Bâton",
+        "image" : "wand.png",
+        "line": 0,
+        "column": 0,
+        "damage": 20
+    },
+    {
+        "name": "Bâton de cristal",
+        "image" : "wand2.png",
+        "line": 0,
+        "column": 0,
+        "damage": 30
+    },
+    {
+        "name": "Arc",
+        "image" : "bow.png",
+        "line": 0,
+        "column": 0,
+        "damage": 25
+    },
+    {
+        "name": "Arc de l'Aube",
+        "image" : "bow2.png",
+        "line": 0,
+        "column": 0,
+        "damage": 35
+    },
+    {
+        "name": "Epée",
+        "image" : "sword.png",
+        "line": 0,
+        "column": 0,
+        "damage": 20
+    },
+    {
+        "name": "Excalibur",
+        "image" : "sword2.png",
+        "line": 0,
+        "column": 0,
+        "damage": 40
+    },
+    {
+        "name": "Hache",
+        "image" : "axe.png",
+        "line": 0,
+        "column": 0,
+        "damage": 25
+    },
+    {
+        "name": "Hache dorée du Matin",
+        "image" : "axe2.png",
+        "line": 0,
+        "column": 0,
+        "damage": 35
+    },
+    {
+        "name": "Marteau",
+        "image" : "hammer.png",
+        "line": 0,
+        "column": 0,
+        "damage": 35
+    },
+    {
+        "name": "Marteau du Crépuscule",
+        "image" : "hammer2.png",
+        "line": 0,
+        "column": 0,
+        "damage": 45
+    },
+    {
+        "name": "Hache Double",
+        "image" : "axedouble.png",
+        "line": 0,
+        "column": 0,
+        "damage": 40
+    },
+    {
+        "name": "Hache Double de la Lumière",
+        "image" : "axedouble2.png",
+        "line": 0,
+        "column": 0,
+        "damage": 50
+    }
+]

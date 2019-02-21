@@ -43,7 +43,9 @@ $(function(){
         
         var mapLoaded = JSON.parse(localStorage.getItem("boardgame"));
         
-        let world = mapLoaded.world.substr(27,mapLoaded.world.length-1);        
+        console.log(mapLoaded.world);
+        let world = mapLoaded.world.substr(20,mapLoaded.world.length-1);        
+        console.log(world);
         var newMap = new Map(mapLoaded.maxLine,mapLoaded.maxColumn,mapLoaded.size,world);
 
         for (let i = 0 ; i < newMap.maxLine ; i++) {

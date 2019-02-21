@@ -4,7 +4,7 @@ class Map {
         this.maxLine = maxLine;
         this.maxColumn = maxColumn;
         this.size = size;
-        this.world = "../boardgame/assets/images/"+world+"/";
+        this.world = "../boardgame/assets/"+world+"/";
         this.board = new Array();
         this.characters = new Array();
         this.current = 0;
@@ -51,7 +51,7 @@ class Map {
         // Json : weapons 
         $.ajax({
             type: 'GET',
-            url: 'json/weapon.json',
+            url: map.world+'json/weapon.json',
             timeout: 2000,
             success: function(data) {
                     // Weapons recovery
@@ -103,7 +103,7 @@ class Map {
         // Json : characters
         $.ajax({
             type: 'GET',
-            url: 'json/character.json',
+            url: map.world+'json/character.json',
             timeout: 2000,
             success: function(data) {
                     // Characters recovery
@@ -120,7 +120,7 @@ class Map {
                     // Array with coordinates of Characters
                     let posPlayer = new Array();
                     // Default Weapon 
-                    let weaponBasic = new Item("Epée en bois","woodSword.png",null,null,"weapon",10);   
+                    let weaponBasic = new Item("Arme de Base","basic_weapon.png",null,null,"weapon",10);   
                     // We initialize the character table with different random avatars
                     let tableIndexAvatar = new Array();
                     for ( let i = 0 ; i < characters.length ; i++) {
@@ -210,6 +210,8 @@ class Map {
                 map.board[abscisse][ordonnee].displayConteneur(map);                
             });
         });
+        // Display UI
+        $('#ui-players').show();
     }
 
     removeDisplayMove(){
