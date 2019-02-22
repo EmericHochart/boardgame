@@ -59,6 +59,7 @@ Les versions utilisées dans ce projet seront décrites dans cette section :
 * Javascript
 * [jQuery 3.3.1](https://jquery.com/)
 * [jQuery UI 1.12.1](https://jqueryui.com/)
+* [jQuery UI Touch Punch](http://touchpunch.furf.com/)
 * JSON
 * CSS 3
 * HTML 5
