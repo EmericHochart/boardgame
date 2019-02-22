@@ -87,7 +87,7 @@ La section configuration vous permet de modifier certains paramètres du jeu.
 
 Il est possible d'ajouter vos propres mondes à Boardgame.
 Vous pouvez ainsi créer un environnement avec vos propres armes et personnages, ainsi qu'un terrain de jeu personnalisé.
-Pour cela ,suivez ce [Guide - Pas à Pas pour créer son monde](). 
+Pour cela ,suivez ce [Guide - Pas à Pas pour créer son monde](https://emeric.hochart.info/boardgame/how_to_create_your_own_world.pdf). 
 
 ----
 ## Ressources
@@ -101,7 +101,7 @@ Pour cela ,suivez ce [Guide - Pas à Pas pour créer son monde]().
 
 ### Vidéos
 
-* ["5 min Quick Start" tutoriel]()
+* ["5 min Quick Start" tutoriel](https://www.youtube.com/watch?v=6I-il-HaSsY&feature=youtu.be)
 
 ### Images
 
