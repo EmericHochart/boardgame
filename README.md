@@ -138,7 +138,7 @@ Pour cela ,suivez ce [Guide - Pas à Pas pour créer son monde](https://emeric.h
     * Ajouter un environnement sonore
     * Créer un background éditorial (histoire des personnages, phrases durant le combat, etc...)
 * Fonctionnalités
-    * Intelligence Artificielle à implémenter
+    * Intelligence Artificielle à implémenter sur la branche ia-develop
     * Rendre dynamique le formulaire de configuration en fonction de l'environnement, du Json ou du nombre de joueurs...
     * Permettre plusieurs sauvegardes
     * Système d'inventaire et d'autres items
