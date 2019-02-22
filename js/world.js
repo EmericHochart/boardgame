@@ -11,7 +11,15 @@ $(function(){
         $('.play').attr('disabled','true');
         $('#loadGame').css('display','none');
         var nowMap = null;
-        var nowMap = new Map(10,10,64,"medieval");        
+        // Managing Mobile
+        var size = 64;
+        if ($(window).width()<740){
+        var sizeMax = parseInt($(window).width()/10);
+        if (64>sizeMax){
+            size = sizeMax;
+        };
+        }
+        var nowMap = new Map(10,10,size,"medieval");        
         nowMap.initGame(10,4,2);
         e.preventDefault();
     });

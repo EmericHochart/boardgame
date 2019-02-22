@@ -52,3 +52,8 @@
 .play {  
           
 }
+@media (max-width: 740px){
+.view2 {
+    height: auto !important;
+}
+}
