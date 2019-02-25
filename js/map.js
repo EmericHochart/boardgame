@@ -94,7 +94,23 @@ class Map {
                     map.isReady();
                 },
             error: function() {
-                alert('La requête n\'a pas abouti'); }
+                new Noty({
+                    type: 'error',
+                    theme: 'mint',
+                    text: 'Désintégration non prévue des armes',
+                    progressBar: true,
+                    timeout: 2000,
+                    callbacks: {
+                        afterShow: function(){
+                        window.location.reload(true);
+                        }
+                    },
+                    animation: {
+                        open: 'animated bounceInRight', // Animate.css class names
+                        close: 'animated bounceOutRight' // Animate.css class names
+                    }
+                }).show();
+            }
         });    
     }
     
@@ -165,10 +181,25 @@ class Map {
                             errorPlayer = path.app();      
                         };
                         // If there is too much positioning failure, make sure to leave the loop
-                        if (errorPlayer==true){
-                            alert("Echec positionnement Character");
-                            window.location.reload(true);
-                            return false;
+                        if (errorPlayer==true){                            
+                            new Noty({
+                                type: 'error',
+                                theme: 'mint',
+                                text: 'Génération de la carte perturbée par un orage magnétique',
+                                progressBar: true,
+                                timeout: 2000,
+                                callbacks: {
+                                    beforeShow: function() {return false;},
+                                    afterShow: function(){
+                                    window.location.reload(true);
+                                    }
+                                },
+                                animation: {
+                                    open: 'animated bounceInRight', // Animate.css class names
+                                    close: 'animated bounceOutRight' // Animate.css class names
+                                }
+                            }).show();
+                            return false;                            
                         };
                         // We place the character in the box's container
                         square.setConteneur(value);
@@ -184,7 +215,23 @@ class Map {
                     map.isReady();
                 },
             error: function() {
-                alert('La requête n\'a pas abouti'); }
+                new Noty({
+                    type: 'error',
+                    theme: 'mint',
+                    text: 'Les avatars ont fui le combat',
+                    progressBar: true,
+                    timeout: 2000,
+                    callbacks: {
+                        afterShow: function(){
+                        window.location.reload(true);
+                        }
+                    },
+                    animation: {
+                        open: 'animated bounceInRight', // Animate.css class names
+                        close: 'animated bounceOutRight' // Animate.css class names
+                    }
+                }).show();
+            }
         });
     }
 

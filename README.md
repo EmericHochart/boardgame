@@ -64,6 +64,7 @@ Les versions utilisées dans ce projet seront décrites dans cette section :
 * CSS 3
 * HTML 5
 * [Material Design for Bootstrap](https://mdbootstrap.com/)
+* [Noty](https://ned.im/noty/#/)
 
 ----
 ## Documentation

@@ -4,24 +4,24 @@ $(function(){
     $('[data-toggle="tooltip"]').tooltip()
 
     // Animations initialization
-    // new WOW().init();    
+    new WOW().init();    
 
     // Play Now 
     $('#playNow').on('click', function(e){
         $('.play').attr('disabled','true');
         $('#loadGame').css('display','none');
-        var nowMap = null;
+        let nowMap = null;
         // Managing Mobile
-        var size = 64;
+        let size = 64;
         if ($(window).width()<740){
-        var sizeMax = parseInt($(window).width()/10);
+        let sizeMax = parseInt($(window).width()/10);
         if (64>sizeMax){
             size = sizeMax;
         };
-        }
-        var nowMap = new Map(10,10,size,"medieval");        
+        };
+        nowMap = new Map(10,10,size,"medieval");        
         nowMap.initGame(10,4,2);
-        e.preventDefault();
+        //e.preventDefault();
     });
 
     // Play by Setup
@@ -37,6 +37,13 @@ $(function(){
         $('.play').attr('disabled','true');
         $('#loadGame').css('display','none');
         var configMap = null;
+        // Managing Mobile        
+        if ($(window).width()<740){
+        let sizeMax = parseInt($(window).width()/10);
+        if (c_size>sizeMax){
+            c_size = sizeMax;
+        };
+        };
         configMap = new Map(c_lines,c_columns,c_size,c_world);
         $('html,body').animate({scrollTop: $("#board").offset().top},'slow');
         configMap.initGame(c_obstacles,c_weapons,c_players);   
