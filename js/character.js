@@ -6,7 +6,7 @@ class Character {
         this.image = image;
         this.line = line;
         this.column = column;
-        this.conteneur = null;
+        this.container = null;
         this.shield = 0;
     }
 
@@ -130,9 +130,9 @@ class Character {
         $(selElt).draggable( "destroy" );
         map.removeDisplayMove();
         $( '.ui-droppable' ).droppable( "destroy" );
-        map.board[this.line][this.column].removeConteneur(this);        
-        map.board[newLine][newColumn].setConteneur(this);        
-        this.updateCoordinatesConteneur(); 
+        map.board[this.line][this.column].removeContainer(this);        
+        map.board[newLine][newColumn].setContainer(this);        
+        this.updateCoordinatesContainer(); 
         this.characterAround(map);       
     }
 
@@ -171,7 +171,7 @@ class Character {
 
     attack(target){
         // Damage calculation
-        let damage = this.conteneur[0].damage*(1-target.shield);
+        let damage = this.container[0].damage*(1-target.shield);
         // Animation of the damage
         $('#damage-'+target.name).html('<b>'+damage+'</>');
         $('#damage-'+target.name).fadeIn('slow');
@@ -202,7 +202,7 @@ class Character {
         
     getWeapon(){
         // TODO : for the moment a single weapon in the inventory, to improve to have several weapons of which one equipped
-        let inventory = this.conteneur;
+        let inventory = this.container;
         let weapon="";
             $.each(inventory,function(index,value) {
                 if (value instanceof Item && value.model==="weapon"){
@@ -212,22 +212,22 @@ class Character {
         return weapon;              
     }
 
-    setConteneur(element){
-        if(this.conteneur===null) {
-            this.conteneur = new Array();
+    setContainer(element){
+        if(this.container===null) {
+            this.container = new Array();
         };
         element.line = this.line;
         element.column = this.column;
-        this.conteneur.push(element);        
+        this.container.push(element);        
     }
 
-    removeConteneur(element=null){
+    removeContainer(element=null){
         if(element===null) {
-            this.conteneur = null;
+            this.container = null;
             return true;
         }
         else {
-            let inventory = this.conteneur;
+            let inventory = this.container;
             $.each(inventory,function(index,value) {
                 if(element==value) {
                     inventory.splice(index,1);
@@ -238,9 +238,9 @@ class Character {
         };
     }
 
-    updateCoordinatesConteneur(){
+    updateCoordinatesContainer(){
         let player = this;
-        $.each(player.conteneur,function(index,value) {
+        $.each(player.container,function(index,value) {
                 value.line = player.line;
                 value.column = player.column;                
         });            

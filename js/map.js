@@ -85,9 +85,9 @@ class Map {
                             [x,y] = map.randomCoordinates();
                             square = map.board[x][y];
                         }
-                        while (square.isObstacle() || square.conteneur!==null);            
+                        while (square.isObstacle() || square.container!==null);            
                         // We place the weapon in the box's container
-                        square.setConteneur(value);
+                        square.setContainer(value);
                     });
                     // The request is a success, we indicate that we are ready
                     map.readyWeapons = true;
@@ -172,7 +172,7 @@ class Map {
                                 break;
                             };
                         }
-                        while ( square.isObstacle()||square.conteneur!=null||alone==false );
+                        while ( square.isObstacle()||square.container!=null||alone==false );
                         // We check that there is a path from the previous player to the active player
                         if (index>0 && errorPlayer == false){
                             let xa=activeCharacters[index-1].line;                                
@@ -202,9 +202,9 @@ class Map {
                             return false;                            
                         };
                         // We place the character in the box's container
-                        square.setConteneur(value);
+                        square.setContainer(value);
                         // We place the basic weapon in the container of the character
-                        value.setConteneur(weaponBasic);
+                        value.setContainer(weaponBasic);
                         // We add the coordinates of the character in the position table
                         posPlayer.push([x,y]);
                         // We display the UI of the character
@@ -238,7 +238,7 @@ class Map {
     displayUI(player){
         let uiElt = $('#ui-players');
         let playerElt = $('<div/>').attr({id:'ui-'+player.name,class:'row'});
-        playerElt.html('<div class="col-md-3"><img id="avatar-'+player.name+'" src="'+this.world+"characters/"+player.image+'" width="64px" height="64px"></div><div class="col-md-6"><div class="row"><b>'+player.name+'</b></div><div class="progress md-progress"><div id="health-'+player.name+'" class="progress-bar" role="progressbar" style="width:'+player.health+'%" aria-valuenow="'+player.health+'" aria-valuemin="0" aria-valuemax="100"></div></div><div class="damage"><span id="damage-'+player.name+'"></span></div></div><div class="col-md-3"><img id="weapon-'+player.name+'" data-toggle="tooltip" title="'+player.conteneur[0].name+'" src="'+this.world+"weapons/"+player.conteneur[0].image+'" width="64px" height="64px"></div>');
+        playerElt.html('<div class="col-md-3"><img id="avatar-'+player.name+'" src="'+this.world+"characters/"+player.image+'" width="64px" height="64px"></div><div class="col-md-6"><div class="row"><b>'+player.name+'</b></div><div class="progress md-progress"><div id="health-'+player.name+'" class="progress-bar" role="progressbar" style="width:'+player.health+'%" aria-valuenow="'+player.health+'" aria-valuemin="0" aria-valuemax="100"></div></div><div class="damage"><span id="damage-'+player.name+'"></span></div></div><div class="col-md-3"><img id="weapon-'+player.name+'" data-toggle="tooltip" title="'+player.container[0].name+'" src="'+this.world+"weapons/"+player.container[0].image+'" width="64px" height="64px"></div>');
         playerElt.appendTo(uiElt);
         $('<hr/>').appendTo(uiElt);
     }
@@ -254,7 +254,7 @@ class Map {
                 // Display square
                 map.board[abscisse][ordonnee].displayCase(map);
                 // Display Container
-                map.board[abscisse][ordonnee].displayConteneur(map);                
+                map.board[abscisse][ordonnee].displayContainer(map);                
             });
         });
         // Display UI
@@ -296,7 +296,7 @@ class Map {
                             charactersTemp.splice(index,1);
                         };
                     });                    
-                    map.board[player2.line][player2.column].removeConteneur();
+                    map.board[player2.line][player2.column].removeContainer();
                     $('#ui-players>h3').html(player1.name+" a gagné");
                     $('#avatar-'+player2.name).attr('src',map.world+"grave.png");
                     $('#'+player2.name).css('background-image',"url('"+map.world+"grave.png')");
@@ -318,7 +318,7 @@ class Map {
             $('#defense').on('click', function(){
                 $('#ui-players>h3').html(player1.name+" se défend !");
                 player1.defend();
-                player1.updateHealth(player2.conteneur[0].damage*player1.shield);
+                player1.updateHealth(player2.container[0].damage*player1.shield);
                 $('#defense').off('click');
                 $('#attack').off('click');
                 map.fight(player2,player1);

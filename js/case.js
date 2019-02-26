@@ -5,7 +5,7 @@ class Case {
         this.column = column;
         this.ground = ground;
         this.image = image;
-        this.conteneur = null;
+        this.container = null;
     }
     
     displayCase(map){
@@ -32,31 +32,31 @@ class Case {
         elt.css('background-image', "url('"+map.world+image+"')");
     }
     
-    displayConteneur(map){
+    displayContainer(map){
         // TODO : managing multiple items in the container
         let that = this;
         let divElt;
         let persoElt;        
         // If the container is not empty then it contains one or more elements
-        if (this.conteneur!==null) {
+        if (this.container!==null) {
             // If the container has no display it is created otherwise it is retrieved
-            if ($('#ConteneurL'+this.line+'C'+this.column).length == 0) {
-            divElt = $('<div/>').attr({id:'ConteneurL'+this.line+'C'+this.column,class:'conteneur'});
+            if ($('#ContainerL'+this.line+'C'+this.column).length == 0) {
+            divElt = $('<div/>').attr({id:'ContainerL'+this.line+'C'+this.column,class:'containerGame'});
             this.setCaseSize(map,divElt);
             divElt.appendTo('#L'+this.line+'C'+this.column);
             }
             else {
-                divElt = $('#ConteneurL'+this.line+'C'+this.column);
+                divElt = $('#ContainerL'+this.line+'C'+this.column);
                 
             }; 
             // If the container contains 1 character so we only display him otherwise if we have one item we display the item
-            let inventaire = this.conteneur;
+            let inventaire = this.container;
             $.each(inventaire,function(index,value) {
                 // Character Display                
                 if(value instanceof Character) {
                     let url = "url('"+map.world+"characters/"+value.image+"')";
                     if ($('#'+value.name).length == 0) {
-                        persoElt = $('<div/>').attr({id: value.name, class:'conteneur'});
+                        persoElt = $('<div/>').attr({id: value.name, class:'containerGame'});
                         persoElt.css('background-image', url);
                         that.setCaseSize(map,persoElt);
                         persoElt.appendTo('#board');
@@ -75,22 +75,22 @@ class Case {
         };
     }
 
-    setConteneur(element){
-        if(this.conteneur===null) {
-            this.conteneur = new Array();
+    setContainer(element){
+        if(this.container===null) {
+            this.container = new Array();
         };       
         element.line = this.line;
         element.column = this.column;
-        this.conteneur.push(element);
+        this.container.push(element);
     }
 
-    removeConteneur(element=null){
+    removeContainer(element=null){
         if(element===null) {
-            this.conteneur = null;
+            this.container = null;
             return true;
         }
         else {
-            let inventory = this.conteneur;
+            let inventory = this.container;
             $.each(inventory,function(index,value) {
                 if(element==value) {
                     inventory.splice(index,1);
@@ -102,7 +102,7 @@ class Case {
     }
 
     getWeapon(){
-        let inventory = this.conteneur;
+        let inventory = this.container;
         let weapon = "";
         $.each(inventory,function(index,value) {
             if (value instanceof Item && value.model==="weapon"){
@@ -113,7 +113,7 @@ class Case {
     }
 
     getCharacter(){
-        let inventory = this.conteneur;
+        let inventory = this.container;
         let character = "";
         $.each(inventory,function(index,value) {
             if (value instanceof Character){
@@ -124,11 +124,11 @@ class Case {
     }
 
     hasWeapon(model=null){
-        let conteneur = this.conteneur;
+        let container = this.container;
         if(model===null) {
-            if (conteneur!==null) {
+            if (container!==null) {
                 let condition = false;
-                $.each(conteneur,function(index,value) {
+                $.each(container,function(index,value) {
                     if (value instanceof Item && value.model=="weapon"){
                         condition = true;
                     }
@@ -145,11 +145,11 @@ class Case {
     }
     
     hasPlayer(player=null){
-        let conteneur = this.conteneur;
+        let container = this.container;
         if(player===null) {
-            if (conteneur!==null) {
+            if (container!==null) {
                 let condition = false;
-                $.each(conteneur,function(index,value) {
+                $.each(container,function(index,value) {
                     if (value instanceof Character) {
                         condition = true;
                     }
@@ -187,15 +187,15 @@ class Case {
     }
 
     changeWeapon(map,player){
-        let weaponConteneur =this.getWeapon();
-        this.removeConteneur(weaponConteneur);
+        let weaponContainer =this.getWeapon();
+        this.removeContainer(weaponContainer);
         let weaponCharacter = player.getWeapon();
-        player.removeConteneur(weaponCharacter);
-        this.setConteneur(weaponCharacter);
-        player.setConteneur(weaponConteneur);
-        $('#ConteneurL'+this.line+'C'+this.column).css('background-image',"url('"+map.world+"weapons/"+weaponCharacter.image+"')");
-        $('#weapon-'+player.name).attr('src',map.world+"weapons/"+weaponConteneur.image);
-        $('#weapon-'+player.name).attr('title',weaponConteneur.name);
+        player.removeContainer(weaponCharacter);
+        this.setContainer(weaponCharacter);
+        player.setContainer(weaponContainer);
+        $('#ContainerL'+this.line+'C'+this.column).css('background-image',"url('"+map.world+"weapons/"+weaponCharacter.image+"')");
+        $('#weapon-'+player.name).attr('src',map.world+"weapons/"+weaponContainer.image);
+        $('#weapon-'+player.name).attr('title',weaponContainer.name);
     }
     
     weaponOnPath(map,player,originLine,originColumn){

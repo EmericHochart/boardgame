@@ -70,10 +70,10 @@ $(function(){
                         newMap.board[i][j].ground = mapLoaded.board[i][j].ground;
                         newMap.board[i][j].image = mapLoaded.board[i][j].image;
                         
-                            $.each(mapLoaded.board[i][j].conteneur,function(index,value){
+                            $.each(mapLoaded.board[i][j].container,function(index,value){
                                 if (value.health==undefined){                                   
                                     let item = new Item(value.name,value.image,value.line,value.column,value.model,value.damage);  
-                                    newMap.board[i][j].setConteneur(item);
+                                    newMap.board[i][j].setContainer(item);
                                 }; 
                             });
                     };
@@ -81,13 +81,13 @@ $(function(){
         for (let i = 0 ; i < mapLoaded.characters.length ; i++) {
             newMap.characters[i] = new Character(mapLoaded.characters[i].name,mapLoaded.characters[i].health,mapLoaded.characters[i].image,mapLoaded.characters[i].line,mapLoaded.characters[i].column);
             
-            $.each(mapLoaded.characters[i].conteneur,function(index,value){
+            $.each(mapLoaded.characters[i].container,function(index,value){
                 let item = new Item(value.name,value.image,value.line,value.column,value.model,value.damage);                  
-                newMap.characters[i].setConteneur(item);                
+                newMap.characters[i].setContainer(item);                
             });
 
             newMap.characters[i].shield = mapLoaded.characters[i].shield;
-            newMap.board[mapLoaded.characters[i].line][mapLoaded.characters[i].column].setConteneur(newMap.characters[i]);
+            newMap.board[mapLoaded.characters[i].line][mapLoaded.characters[i].column].setContainer(newMap.characters[i]);
             newMap.displayUI(newMap.characters[i]);
         };
                      
