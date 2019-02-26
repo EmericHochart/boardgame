@@ -99,7 +99,7 @@ class Map {
                     theme: 'mint',
                     text: 'Désintégration non prévue des armes',
                     progressBar: true,
-                    timeout: 2000,
+                    timeout: 4000,
                     callbacks: {
                         afterShow: function(){
                         window.location.reload(true);
@@ -187,7 +187,7 @@ class Map {
                                 theme: 'mint',
                                 text: 'Génération de la carte perturbée par un orage magnétique',
                                 progressBar: true,
-                                timeout: 2000,
+                                timeout: 4000,
                                 callbacks: {
                                     beforeShow: function() {return false;},
                                     afterShow: function(){
@@ -220,7 +220,7 @@ class Map {
                     theme: 'mint',
                     text: 'Les avatars ont fui le combat',
                     progressBar: true,
-                    timeout: 2000,
+                    timeout: 4000,
                     callbacks: {
                         afterShow: function(){
                         window.location.reload(true);
