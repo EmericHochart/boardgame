@@ -101,7 +101,7 @@ class Map {
                     progressBar: true,
                     timeout: 4000,
                     callbacks: {
-                        afterShow: function(){
+                        afterClose: function(){
                         window.location.reload(true);
                         }
                     },
@@ -190,7 +190,7 @@ class Map {
                                 timeout: 4000,
                                 callbacks: {
                                     beforeShow: function() {return false;},
-                                    afterShow: function(){
+                                    afterClose: function(){
                                     window.location.reload(true);
                                     }
                                 },
@@ -222,7 +222,7 @@ class Map {
                     progressBar: true,
                     timeout: 4000,
                     callbacks: {
-                        afterShow: function(){
+                        afterClose: function(){
                         window.location.reload(true);
                         }
                     },
