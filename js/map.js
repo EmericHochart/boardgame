@@ -12,11 +12,11 @@ class Map {
         this.readyCharacters = false;
     }
 
-    initGame(obstacles,weapon,player){
+    initGame(obstacles,weapon,player,npc){
         this.initMap();
         this.initObstacle(obstacles);
         this.initWeapon(weapon);
-        this.initPlayer(player);
+        this.initPlayer(player,npc);
         this.isReady();
     }
 
@@ -98,8 +98,12 @@ class Map {
         });    
     }
     
-    initPlayer(player=2){
-        let map=this;        
+    initPlayer(player=2,npc=0){
+        let map=this;
+        let nb_Character = player + npc;
+        
+        /* Add prop in constructor of Character */
+        
         // Json : characters
         $.ajax({
             type: 'GET',

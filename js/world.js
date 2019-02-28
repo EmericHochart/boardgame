@@ -12,7 +12,7 @@ $(function(){
         $('#loadGame').css('display','none');
         var nowMap = null;
         var nowMap = new Map(10,10,64,"medieval");        
-        nowMap.initGame(10,4,2);
+        nowMap.initGame(10,4,2,0);
         e.preventDefault();
     });
 
@@ -25,13 +25,13 @@ $(function(){
         let c_weapons = Number($('#configWeapons').val());
         let c_world = $('#configWorld').val();
         let c_players = Number($('#configPlayers').val());
-        //let c_ia = Number($('#configIA').val());
+        let c_ia = Number($('#configIA').val());
         $('.play').attr('disabled','true');
         $('#loadGame').css('display','none');
         var configMap = null;
         configMap = new Map(c_lines,c_columns,c_size,c_world);
         $('html,body').animate({scrollTop: $("#board").offset().top},'slow');
-        configMap.initGame(c_obstacles,c_weapons,c_players);   
+        configMap.initGame(c_obstacles,c_weapons,c_players,c_ia);   
         e.preventDefault();
     });
 
