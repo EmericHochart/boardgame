@@ -8,7 +8,9 @@ $(function(){
 
     // Play Now 
     $('#playNow').on('click', function(e){
+        // Disable button play
         $('.play').attr('disabled','true');
+        // Disable url Load
         $('#loadGame').css('display','none');
         let nowMap = null;
         // Managing Mobile
@@ -19,13 +21,14 @@ $(function(){
             size = sizeMax;
         };
         };
+        // Initialize Map
         nowMap = new Map(10,10,size,"medieval");        
-        nowMap.initGame(10,4,2);
-        //e.preventDefault();
+        nowMap.initGame(10,4,2);        
     });
 
     // Play by Setup
-    $('#config').on('submit',function(e){        
+    $('#config').on('submit',function(e){
+        // Retrieve form values        
         let c_lines = Number($('#configLines').val());
         let c_columns = Number($('#configColumns').val());
         let c_size = Number($('#configSize').val());
@@ -34,7 +37,9 @@ $(function(){
         let c_world = $('#configWorld').val();
         let c_players = Number($('#configPlayers').val());
         //let c_ia = Number($('#configIA').val());
+        // Disable button play
         $('.play').attr('disabled','true');
+        // Disable url Load
         $('#loadGame').css('display','none');
         var configMap = null;
         // Managing Mobile        
@@ -44,7 +49,9 @@ $(function(){
             c_size = sizeMax;
         };
         };
+        // Initialize Custom Map
         configMap = new Map(c_lines,c_columns,c_size,c_world);
+        // Animated displacement
         $('html,body').animate({scrollTop: $("#board").offset().top},'slow');
         configMap.initGame(c_obstacles,c_weapons,c_players);   
         e.preventDefault();
@@ -52,17 +59,18 @@ $(function(){
 
     // Load Game
     $('#loadGame').on('click', function(e){        
-        
+        // Disable button play
         $('.play').attr('disabled','true');
+        // Disable url Load
         $('#loadGame').css('display','none');        
         
+        // Recovering the backup
         var mapLoaded = JSON.parse(localStorage.getItem("boardgame"));
-        
-        console.log(mapLoaded.world);
+        // Recovery of the name of the world for reconstruction        
         let world = mapLoaded.world.substr(20,mapLoaded.world.length-1);        
-        console.log(world);
+        // Initialize Map Loaded
         var newMap = new Map(mapLoaded.maxLine,mapLoaded.maxColumn,mapLoaded.size,world);
-
+        // Reconstruction of the instance of Map
         for (let i = 0 ; i < newMap.maxLine ; i++) {
                     newMap.board[i] = new Array();
                     for (let j = 0 ; j < newMap.maxColumn ; j++) {
@@ -89,11 +97,11 @@ $(function(){
             newMap.characters[i].shield = mapLoaded.characters[i].shield;
             newMap.board[mapLoaded.characters[i].line][mapLoaded.characters[i].column].setContainer(newMap.characters[i]);
             newMap.displayUI(newMap.characters[i]);
-        };
-                     
+        };                     
         newMap.current = mapLoaded.current;
         newMap.readyWeapons = true;
-        newMap.readyCharacters = true;        
+        newMap.readyCharacters = true;
+        // Call of the method isReady to launch the game        
         newMap.isReady();
         e.preventDefault();        
     });    
